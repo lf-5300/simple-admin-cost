@@ -1,0 +1,602 @@
+{
+  "consumes": [
+    "application/json"
+  ],
+  "produces": [
+    "application/json"
+  ],
+  "schemes": [
+    "http",
+    "https"
+  ],
+  "swagger": "2.0",
+  "info": {
+    "description": "Description: cost service",
+    "title": "cost",
+    "version": "0.0.1"
+  },
+  "host": "localhost:8081",
+  "basePath": "/",
+  "paths": {
+    "/init/database": {
+      "get": {
+        "description": "Initialize database | 初始化数据库",
+        "tags": [
+          "base"
+        ],
+        "summary": "Initialize database | 初始化数据库",
+        "operationId": "InitDatabase",
+        "responses": {
+          "200": {
+            "description": "BaseMsgResp",
+            "schema": {
+              "$ref": "#/definitions/BaseMsgResp"
+            }
+          }
+        }
+      }
+    },
+    "/project": {
+      "post": {
+        "description": "Get project by ID | 通过ID获取Project",
+        "tags": [
+          "project"
+        ],
+        "summary": "Get project by ID | 通过ID获取Project",
+        "operationId": "GetProjectById",
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "schema": {
+              "type": "object",
+              "$ref": "#/definitions/IDReq"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "ProjectInfoResp",
+            "schema": {
+              "$ref": "#/definitions/ProjectInfoResp"
+            }
+          }
+        }
+      }
+    },
+    "/project/create": {
+      "post": {
+        "description": "Create project information | 创建Project",
+        "tags": [
+          "project"
+        ],
+        "summary": "Create project information | 创建Project",
+        "operationId": "CreateProject",
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "schema": {
+              "type": "object",
+              "$ref": "#/definitions/ProjectInfo"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "BaseMsgResp",
+            "schema": {
+              "$ref": "#/definitions/BaseMsgResp"
+            }
+          }
+        }
+      }
+    },
+    "/project/delete": {
+      "post": {
+        "description": "Delete project information | 删除Project信息",
+        "tags": [
+          "project"
+        ],
+        "summary": "Delete project information | 删除Project信息",
+        "operationId": "DeleteProject",
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "schema": {
+              "type": "object",
+              "$ref": "#/definitions/IDsReq"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "BaseMsgResp",
+            "schema": {
+              "$ref": "#/definitions/BaseMsgResp"
+            }
+          }
+        }
+      }
+    },
+    "/project/list": {
+      "post": {
+        "description": "Get project list | 获取Project列表",
+        "tags": [
+          "project"
+        ],
+        "summary": "Get project list | 获取Project列表",
+        "operationId": "GetProjectList",
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "schema": {
+              "type": "object",
+              "$ref": "#/definitions/ProjectListReq"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "ProjectListResp",
+            "schema": {
+              "$ref": "#/definitions/ProjectListResp"
+            }
+          }
+        }
+      }
+    },
+    "/project/update": {
+      "post": {
+        "description": "Update project information | 更新Project",
+        "tags": [
+          "project"
+        ],
+        "summary": "Update project information | 更新Project",
+        "operationId": "UpdateProject",
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "schema": {
+              "type": "object",
+              "$ref": "#/definitions/ProjectInfo"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "BaseMsgResp",
+            "schema": {
+              "$ref": "#/definitions/BaseMsgResp"
+            }
+          }
+        }
+      }
+    }
+  },
+  "definitions": {
+    "BaseDataInfo": {
+      "description": "The basic response with data | 基础带数据信息",
+      "type": "object",
+      "properties": {
+        "code": {
+          "description": "Error code | 错误代码",
+          "type": "integer",
+          "format": "int64",
+          "x-go-name": "Code"
+        },
+        "data": {
+          "description": "Data | 数据",
+          "type": "string",
+          "x-go-name": "Data"
+        },
+        "msg": {
+          "description": "Message | 提示信息",
+          "type": "string",
+          "x-go-name": "Msg"
+        }
+      },
+      "x-go-package": "github.com/hf/simple-admin-cost-api/internal/types"
+    },
+    "BaseIDInfo": {
+      "description": "The base ID response data | 基础ID信息",
+      "type": "object",
+      "properties": {
+        "createdAt": {
+          "description": "Create date | 创建日期",
+          "type": "integer",
+          "format": "int64",
+          "x-go-name": "CreatedAt"
+        },
+        "id": {
+          "description": "ID",
+          "type": "integer",
+          "format": "uint64",
+          "x-go-name": "Id"
+        },
+        "updatedAt": {
+          "description": "Update date | 更新日期",
+          "type": "integer",
+          "format": "int64",
+          "x-go-name": "UpdatedAt"
+        }
+      },
+      "x-go-package": "github.com/hf/simple-admin-cost-api/internal/types"
+    },
+    "BaseListInfo": {
+      "description": "The basic response with data | 基础带数据信息",
+      "type": "object",
+      "properties": {
+        "data": {
+          "description": "Data | 数据",
+          "type": "string",
+          "x-go-name": "Data"
+        },
+        "total": {
+          "description": "The total number of data | 数据总数",
+          "type": "integer",
+          "format": "uint64",
+          "x-go-name": "Total"
+        }
+      },
+      "x-go-package": "github.com/hf/simple-admin-cost-api/internal/types"
+    },
+    "BaseMsgResp": {
+      "description": "The basic response without data | 基础不带数据信息",
+      "type": "object",
+      "properties": {
+        "code": {
+          "description": "Error code | 错误代码",
+          "type": "integer",
+          "format": "int64",
+          "x-go-name": "Code"
+        },
+        "msg": {
+          "description": "Message | 提示信息",
+          "type": "string",
+          "x-go-name": "Msg"
+        }
+      },
+      "x-go-package": "github.com/hf/simple-admin-cost-api/internal/types"
+    },
+    "BaseUUIDInfo": {
+      "description": "The base UUID response data | 基础UUID信息",
+      "type": "object",
+      "properties": {
+        "createdAt": {
+          "description": "Create date | 创建日期",
+          "type": "integer",
+          "format": "int64",
+          "x-go-name": "CreatedAt"
+        },
+        "id": {
+          "description": "ID",
+          "type": "string",
+          "x-go-name": "Id"
+        },
+        "updatedAt": {
+          "description": "Update date | 更新日期",
+          "type": "integer",
+          "format": "int64",
+          "x-go-name": "UpdatedAt"
+        }
+      },
+      "x-go-package": "github.com/hf/simple-admin-cost-api/internal/types"
+    },
+    "IDPathReq": {
+      "description": "Basic ID request | 基础ID地址参数请求",
+      "type": "object",
+      "required": [
+        "Id"
+      ],
+      "properties": {
+        "Id": {
+          "description": "ID",
+          "type": "integer",
+          "format": "uint64"
+        }
+      },
+      "x-go-package": "github.com/hf/simple-admin-cost-api/internal/types"
+    },
+    "IDReq": {
+      "description": "Basic ID request | 基础ID参数请求",
+      "type": "object",
+      "required": [
+        "id"
+      ],
+      "properties": {
+        "id": {
+          "description": "ID",
+          "type": "integer",
+          "format": "uint64",
+          "x-go-name": "Id"
+        }
+      },
+      "x-go-package": "github.com/hf/simple-admin-cost-api/internal/types"
+    },
+    "IDsReq": {
+      "description": "Basic IDs request | 基础ID数组参数请求",
+      "type": "object",
+      "required": [
+        "ids"
+      ],
+      "properties": {
+        "ids": {
+          "description": "IDs",
+          "type": "array",
+          "items": {
+            "type": "integer",
+            "format": "uint64"
+          },
+          "x-go-name": "Ids"
+        }
+      },
+      "x-go-package": "github.com/hf/simple-admin-cost-api/internal/types"
+    },
+    "PageInfo": {
+      "description": "The page request parameters | 列表请求参数",
+      "type": "object",
+      "required": [
+        "page",
+        "pageSize"
+      ],
+      "properties": {
+        "page": {
+          "description": "Page number | 第几页",
+          "type": "integer",
+          "format": "uint64",
+          "minimum": 0,
+          "x-go-name": "Page"
+        },
+        "pageSize": {
+          "description": "Page size | 单页数据行数",
+          "type": "integer",
+          "format": "uint64",
+          "maximum": 100000,
+          "x-go-name": "PageSize"
+        }
+      },
+      "x-go-package": "github.com/hf/simple-admin-cost-api/internal/types"
+    },
+    "ProjectInfo": {
+      "description": "The response data of project information | Project信息",
+      "type": "object",
+      "properties": {
+        "code": {
+          "description": "项目编码",
+          "type": "string",
+          "x-go-name": "Code"
+        },
+        "createBy": {
+          "description": "创建人",
+          "type": "integer",
+          "format": "uint64",
+          "x-go-name": "CreateBy"
+        },
+        "createTime": {
+          "description": "创建时间",
+          "type": "integer",
+          "format": "int64",
+          "x-go-name": "CreateTime"
+        },
+        "createdAt": {
+          "description": "Create date | 创建日期",
+          "type": "integer",
+          "format": "int64",
+          "x-go-name": "CreatedAt"
+        },
+        "deleted": {
+          "description": "是否删除",
+          "type": "boolean",
+          "x-go-name": "Deleted"
+        },
+        "id": {
+          "description": "ID",
+          "type": "integer",
+          "format": "uint64",
+          "x-go-name": "Id"
+        },
+        "name": {
+          "description": "项目名称",
+          "type": "string",
+          "x-go-name": "Name"
+        },
+        "tenantId": {
+          "description": "租户号",
+          "type": "integer",
+          "format": "uint64",
+          "x-go-name": "TenantId"
+        },
+        "updateBy": {
+          "description": "更新人",
+          "type": "integer",
+          "format": "uint64",
+          "x-go-name": "UpdateBy"
+        },
+        "updateTime": {
+          "description": "更新时间",
+          "type": "integer",
+          "format": "int64",
+          "x-go-name": "UpdateTime"
+        },
+        "updatedAt": {
+          "description": "Update date | 更新日期",
+          "type": "integer",
+          "format": "int64",
+          "x-go-name": "UpdatedAt"
+        }
+      },
+      "x-go-package": "github.com/hf/simple-admin-cost-api/internal/types"
+    },
+    "ProjectInfoResp": {
+      "description": "Project information response | Project信息返回体",
+      "type": "object",
+      "properties": {
+        "code": {
+          "description": "Error code | 错误代码",
+          "type": "integer",
+          "format": "int64",
+          "x-go-name": "Code"
+        },
+        "data": {
+          "description": "Data | 数据",
+          "type": "string",
+          "x-go-name": "Data",
+          "$ref": "#/definitions/ProjectInfo"
+        },
+        "msg": {
+          "description": "Message | 提示信息",
+          "type": "string",
+          "x-go-name": "Msg"
+        }
+      },
+      "x-go-package": "github.com/hf/simple-admin-cost-api/internal/types"
+    },
+    "ProjectListInfo": {
+      "description": "Project list data | Project列表数据",
+      "type": "object",
+      "properties": {
+        "data": {
+          "description": "The API list data | Project列表数据",
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/ProjectInfo"
+          },
+          "x-go-name": "Data"
+        },
+        "total": {
+          "description": "The total number of data | 数据总数",
+          "type": "integer",
+          "format": "uint64",
+          "x-go-name": "Total"
+        }
+      },
+      "x-go-package": "github.com/hf/simple-admin-cost-api/internal/types"
+    },
+    "ProjectListReq": {
+      "description": "Get project list request params | Project列表请求参数",
+      "type": "object",
+      "required": [
+        "page",
+        "pageSize"
+      ],
+      "properties": {
+        "code": {
+          "description": "项目编码",
+          "type": "string",
+          "x-go-name": "Code"
+        },
+        "name": {
+          "description": "项目名称",
+          "type": "string",
+          "x-go-name": "Name"
+        },
+        "page": {
+          "description": "Page number | 第几页",
+          "type": "integer",
+          "format": "uint64",
+          "minimum": 0,
+          "x-go-name": "Page"
+        },
+        "pageSize": {
+          "description": "Page size | 单页数据行数",
+          "type": "integer",
+          "format": "uint64",
+          "maximum": 100000,
+          "x-go-name": "PageSize"
+        }
+      },
+      "x-go-package": "github.com/hf/simple-admin-cost-api/internal/types"
+    },
+    "ProjectListResp": {
+      "description": "The response data of project list | Project列表数据",
+      "type": "object",
+      "properties": {
+        "code": {
+          "description": "Error code | 错误代码",
+          "type": "integer",
+          "format": "int64",
+          "x-go-name": "Code"
+        },
+        "data": {
+          "description": "Data | 数据",
+          "type": "string",
+          "x-go-name": "Data",
+          "$ref": "#/definitions/ProjectListInfo"
+        },
+        "msg": {
+          "description": "Message | 提示信息",
+          "type": "string",
+          "x-go-name": "Msg"
+        }
+      },
+      "x-go-package": "github.com/hf/simple-admin-cost-api/internal/types"
+    },
+    "UUIDPathReq": {
+      "description": "Basic UUID request in path | 基础UUID地址参数请求",
+      "type": "object",
+      "required": [
+        "Id"
+      ],
+      "properties": {
+        "Id": {
+          "description": "ID",
+          "type": "string"
+        }
+      },
+      "x-go-package": "github.com/hf/simple-admin-cost-api/internal/types"
+    },
+    "UUIDReq": {
+      "description": "Basic UUID request | 基础UUID参数请求",
+      "type": "object",
+      "required": [
+        "id"
+      ],
+      "properties": {
+        "id": {
+          "description": "ID",
+          "type": "string",
+          "maxLength": 36,
+          "minLength": 36,
+          "x-go-name": "Id"
+        }
+      },
+      "x-go-package": "github.com/hf/simple-admin-cost-api/internal/types"
+    },
+    "UUIDsReq": {
+      "description": "Basic UUID array request | 基础UUID数组参数请求",
+      "type": "object",
+      "required": [
+        "ids"
+      ],
+      "properties": {
+        "ids": {
+          "description": "Ids",
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "x-go-name": "Ids"
+        }
+      },
+      "x-go-package": "github.com/hf/simple-admin-cost-api/internal/types"
+    }
+  },
+  "securityDefinitions": {
+    "Token": {
+      "type": "apiKey",
+      "name": "Authorization",
+      "in": "header"
+    }
+  },
+  "security": [
+    {
+      "Token": [
+        "[]"
+      ]
+    }
+  ]
+}

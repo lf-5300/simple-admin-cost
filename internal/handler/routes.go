@@ -5,6 +5,7 @@ import (
 	"net/http"
 
 	base "github.com/hf/simple-admin-cost-api/internal/handler/base"
+	project "github.com/hf/simple-admin-cost-api/internal/handler/project"
 	"github.com/hf/simple-admin-cost-api/internal/svc"
 
 	"github.com/zeromicro/go-zero/rest"
@@ -19,5 +20,39 @@ func RegisterHandlers(server *rest.Server, serverCtx *svc.ServiceContext) {
 				Handler: base.InitDatabaseHandler(serverCtx),
 			},
 		},
+	)
+
+	server.AddRoutes(
+		rest.WithMiddlewares(
+			[]rest.Middleware{serverCtx.Authority},
+			[]rest.Route{
+				{
+					Method:  http.MethodPost,
+					Path:    "/project/create",
+					Handler: project.CreateProjectHandler(serverCtx),
+				},
+				{
+					Method:  http.MethodPost,
+					Path:    "/project/update",
+					Handler: project.UpdateProjectHandler(serverCtx),
+				},
+				{
+					Method:  http.MethodPost,
+					Path:    "/project/delete",
+					Handler: project.DeleteProjectHandler(serverCtx),
+				},
+				{
+					Method:  http.MethodPost,
+					Path:    "/project/list",
+					Handler: project.GetProjectListHandler(serverCtx),
+				},
+				{
+					Method:  http.MethodPost,
+					Path:    "/project",
+					Handler: project.GetProjectByIdHandler(serverCtx),
+				},
+			}...,
+		),
+		rest.WithJwt(serverCtx.Config.Auth.AccessSecret),
 	)
 }

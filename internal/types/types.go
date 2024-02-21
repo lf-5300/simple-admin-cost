@@ -114,3 +114,59 @@ type BaseUUIDInfo struct {
 	// Update date | 更新日期
 	UpdatedAt *int64 `json:"updatedAt,optional"`
 }
+
+// The response data of project information | Project信息
+// swagger:model ProjectInfo
+type ProjectInfo struct {
+	BaseIDInfo
+	// 项目名称
+	Name *string `json:"name,optional"`
+	// 项目编码
+	Code *string `json:"code,optional"`
+	// 创建人
+	CreateBy *uint64 `json:"createBy,optional"`
+	// 创建时间
+	CreateTime *int64 `json:"createTime,optional"`
+	// 更新人
+	UpdateBy *uint64 `json:"updateBy,optional"`
+	// 更新时间
+	UpdateTime *int64 `json:"updateTime,optional"`
+	// 租户号
+	TenantId *uint64 `json:"tenantId,optional"`
+	// 是否删除
+	Deleted *bool `json:"deleted,optional"`
+}
+
+// The response data of project list | Project列表数据
+// swagger:model ProjectListResp
+type ProjectListResp struct {
+	BaseDataInfo
+	// Project list data | Project列表数据
+	Data ProjectListInfo `json:"data"`
+}
+
+// Project list data | Project列表数据
+// swagger:model ProjectListInfo
+type ProjectListInfo struct {
+	BaseListInfo
+	// The API list data | Project列表数据
+	Data []ProjectInfo `json:"data"`
+}
+
+// Get project list request params | Project列表请求参数
+// swagger:model ProjectListReq
+type ProjectListReq struct {
+	PageInfo
+	// 项目名称
+	Name *string `json:"name,optional"`
+	// 项目编码
+	Code *string `json:"code,optional"`
+}
+
+// Project information response | Project信息返回体
+// swagger:model ProjectInfoResp
+type ProjectInfoResp struct {
+	BaseDataInfo
+	// Project information | Project数据
+	Data ProjectInfo `json:"data"`
+}
