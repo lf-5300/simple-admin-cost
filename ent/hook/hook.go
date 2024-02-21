@@ -9,16 +9,16 @@ import (
 	"github.com/hf/simple-admin-cost-api/ent"
 )
 
-// The CostFunc type is an adapter to allow the use of ordinary
-// function as Cost mutator.
-type CostFunc func(context.Context, *ent.CostMutation) (ent.Value, error)
+// The ProjectFunc type is an adapter to allow the use of ordinary
+// function as Project mutator.
+type ProjectFunc func(context.Context, *ent.ProjectMutation) (ent.Value, error)
 
 // Mutate calls f(ctx, m).
-func (f CostFunc) Mutate(ctx context.Context, m ent.Mutation) (ent.Value, error) {
-	if mv, ok := m.(*ent.CostMutation); ok {
+func (f ProjectFunc) Mutate(ctx context.Context, m ent.Mutation) (ent.Value, error) {
+	if mv, ok := m.(*ent.ProjectMutation); ok {
 		return f(ctx, mv)
 	}
-	return nil, fmt.Errorf("unexpected mutation type %T. expect *ent.CostMutation", m)
+	return nil, fmt.Errorf("unexpected mutation type %T. expect *ent.ProjectMutation", m)
 }
 
 // Condition is a hook condition function.

@@ -6,5 +6,5 @@ import (
 	"entgo.io/ent/dialect/sql"
 )
 
-// Cost is the predicate function for cost builders.
-type Cost func(*sql.Selector)
+// Project is the predicate function for project builders.
+type Project func(*sql.Selector)

@@ -13,7 +13,7 @@ type Project struct {
 
 func (Project) Fields() []ent.Field {
 	return []ent.Field{
-		field.String("id").
+		field.Uint64("id").
 			Annotations(entsql.WithComments(true)).
 			Comment("主键"),
 		field.String("name").
@@ -22,19 +22,19 @@ func (Project) Fields() []ent.Field {
 		field.String("code").
 			Annotations(entsql.WithComments(true)).
 			Comment("项目编码"),
-		field.String("create_by").Optional().
+		field.Uint64("create_by").Optional().
 			Annotations(entsql.WithComments(true)).
 			Comment("创建人"),
 		field.Time("create_time").Optional().
 			Annotations(entsql.WithComments(true)).
 			Comment("创建时间"),
-		field.String("update_by").Optional().
+		field.Uint64("update_by").Optional().
 			Annotations(entsql.WithComments(true)).
 			Comment("更新人"),
 		field.Time("update_time").Optional().
 			Annotations(entsql.WithComments(true)).
 			Comment("更新时间"),
-		field.String("tenant_id").Optional().
+		field.Uint64("tenant_id").Optional().
 			Annotations(entsql.WithComments(true)).
 			Comment("租户号"),
 		field.Bool("deleted").

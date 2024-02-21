@@ -7,10 +7,12 @@ import (
 	"errors"
 	"fmt"
 	"sync"
+	"time"
 
 	"entgo.io/ent"
 	"entgo.io/ent/dialect/sql"
 	"github.com/hf/simple-admin-cost-api/ent/predicate"
+	"github.com/hf/simple-admin-cost-api/ent/project"
 )
 
 const (
@@ -22,32 +24,43 @@ const (
 	OpUpdateOne = ent.OpUpdateOne
 
 	// Node types.
-	TypeCost = "Cost"
+	TypeProject = "Project"
 )
 
-// CostMutation represents an operation that mutates the Cost nodes in the graph.
-type CostMutation struct {
+// ProjectMutation represents an operation that mutates the Project nodes in the graph.
+type ProjectMutation struct {
 	config
 	op            Op
 	typ           string
-	id            *int
+	id            *uint64
+	name          *string
+	code          *string
+	create_by     *uint64
+	addcreate_by  *int64
+	create_time   *time.Time
+	update_by     *uint64
+	addupdate_by  *int64
+	update_time   *time.Time
+	tenant_id     *uint64
+	addtenant_id  *int64
+	deleted       *bool
 	clearedFields map[string]struct{}
 	done          bool
-	oldValue      func(context.Context) (*Cost, error)
-	predicates    []predicate.Cost
+	oldValue      func(context.Context) (*Project, error)
+	predicates    []predicate.Project
 }
 
-var _ ent.Mutation = (*CostMutation)(nil)
+var _ ent.Mutation = (*ProjectMutation)(nil)
 
-// costOption allows management of the mutation configuration using functional options.
-type costOption func(*CostMutation)
+// projectOption allows management of the mutation configuration using functional options.
+type projectOption func(*ProjectMutation)
 
-// newCostMutation creates new mutation for the Cost entity.
-func newCostMutation(c config, op Op, opts ...costOption) *CostMutation {
-	m := &CostMutation{
+// newProjectMutation creates new mutation for the Project entity.
+func newProjectMutation(c config, op Op, opts ...projectOption) *ProjectMutation {
+	m := &ProjectMutation{
 		config:        c,
 		op:            op,
-		typ:           TypeCost,
+		typ:           TypeProject,
 		clearedFields: make(map[string]struct{}),
 	}
 	for _, opt := range opts {
@@ -56,20 +69,20 @@ func newCostMutation(c config, op Op, opts ...costOption) *CostMutation {
 	return m
 }
 
-// withCostID sets the ID field of the mutation.
-func withCostID(id int) costOption {
-	return func(m *CostMutation) {
+// withProjectID sets the ID field of the mutation.
+func withProjectID(id uint64) projectOption {
+	return func(m *ProjectMutation) {
 		var (
 			err   error
 			once  sync.Once
-			value *Cost
+			value *Project
 		)
-		m.oldValue = func(ctx context.Context) (*Cost, error) {
+		m.oldValue = func(ctx context.Context) (*Project, error) {
 			once.Do(func() {
 				if m.done {
 					err = errors.New("querying old values post mutation is not allowed")
 				} else {
-					value, err = m.Client().Cost.Get(ctx, id)
+					value, err = m.Client().Project.Get(ctx, id)
 				}
 			})
 			return value, err
@@ -78,10 +91,10 @@ func withCostID(id int) costOption {
 	}
 }
 
-// withCost sets the old Cost of the mutation.
-func withCost(node *Cost) costOption {
-	return func(m *CostMutation) {
-		m.oldValue = func(context.Context) (*Cost, error) {
+// withProject sets the old Project of the mutation.
+func withProject(node *Project) projectOption {
+	return func(m *ProjectMutation) {
+		m.oldValue = func(context.Context) (*Project, error) {
 			return node, nil
 		}
 		m.id = &node.ID
@@ -90,7 +103,7 @@ func withCost(node *Cost) costOption {
 
 // Client returns a new `ent.Client` from the mutation. If the mutation was
 // executed in a transaction (ent.Tx), a transactional client is returned.
-func (m CostMutation) Client() *Client {
+func (m ProjectMutation) Client() *Client {
 	client := &Client{config: m.config}
 	client.init()
 	return client
@@ -98,7 +111,7 @@ func (m CostMutation) Client() *Client {
 
 // Tx returns an `ent.Tx` for mutations that were executed in transactions;
 // it returns an error otherwise.
-func (m CostMutation) Tx() (*Tx, error) {
+func (m ProjectMutation) Tx() (*Tx, error) {
 	if _, ok := m.driver.(*txDriver); !ok {
 		return nil, errors.New("ent: mutation is not running in a transaction")
 	}
@@ -107,9 +120,15 @@ func (m CostMutation) Tx() (*Tx, error) {
 	return tx, nil
 }
 
+// SetID sets the value of the id field. Note that this
+// operation is only accepted on creation of Project entities.
+func (m *ProjectMutation) SetID(id uint64) {
+	m.id = &id
+}
+
 // ID returns the ID value in the mutation. Note that the ID is only available
 // if it was provided to the builder or after it was returned from the database.
-func (m *CostMutation) ID() (id int, exists bool) {
+func (m *ProjectMutation) ID() (id uint64, exists bool) {
 	if m.id == nil {
 		return
 	}
@@ -120,30 +139,446 @@ func (m *CostMutation) ID() (id int, exists bool) {
 // That means, if the mutation is applied within a transaction with an isolation level such
 // as sql.LevelSerializable, the returned ids match the ids of the rows that will be updated
 // or updated by the mutation.
-func (m *CostMutation) IDs(ctx context.Context) ([]int, error) {
+func (m *ProjectMutation) IDs(ctx context.Context) ([]uint64, error) {
 	switch {
 	case m.op.Is(OpUpdateOne | OpDeleteOne):
 		id, exists := m.ID()
 		if exists {
-			return []int{id}, nil
+			return []uint64{id}, nil
 		}
 		fallthrough
 	case m.op.Is(OpUpdate | OpDelete):
-		return m.Client().Cost.Query().Where(m.predicates...).IDs(ctx)
+		return m.Client().Project.Query().Where(m.predicates...).IDs(ctx)
 	default:
 		return nil, fmt.Errorf("IDs is not allowed on %s operations", m.op)
 	}
 }
 
-// Where appends a list predicates to the CostMutation builder.
-func (m *CostMutation) Where(ps ...predicate.Cost) {
+// SetName sets the "name" field.
+func (m *ProjectMutation) SetName(s string) {
+	m.name = &s
+}
+
+// Name returns the value of the "name" field in the mutation.
+func (m *ProjectMutation) Name() (r string, exists bool) {
+	v := m.name
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldName returns the old "name" field's value of the Project entity.
+// If the Project object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *ProjectMutation) OldName(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldName is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldName requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldName: %w", err)
+	}
+	return oldValue.Name, nil
+}
+
+// ResetName resets all changes to the "name" field.
+func (m *ProjectMutation) ResetName() {
+	m.name = nil
+}
+
+// SetCode sets the "code" field.
+func (m *ProjectMutation) SetCode(s string) {
+	m.code = &s
+}
+
+// Code returns the value of the "code" field in the mutation.
+func (m *ProjectMutation) Code() (r string, exists bool) {
+	v := m.code
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldCode returns the old "code" field's value of the Project entity.
+// If the Project object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *ProjectMutation) OldCode(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldCode is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldCode requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldCode: %w", err)
+	}
+	return oldValue.Code, nil
+}
+
+// ResetCode resets all changes to the "code" field.
+func (m *ProjectMutation) ResetCode() {
+	m.code = nil
+}
+
+// SetCreateBy sets the "create_by" field.
+func (m *ProjectMutation) SetCreateBy(u uint64) {
+	m.create_by = &u
+	m.addcreate_by = nil
+}
+
+// CreateBy returns the value of the "create_by" field in the mutation.
+func (m *ProjectMutation) CreateBy() (r uint64, exists bool) {
+	v := m.create_by
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldCreateBy returns the old "create_by" field's value of the Project entity.
+// If the Project object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *ProjectMutation) OldCreateBy(ctx context.Context) (v uint64, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldCreateBy is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldCreateBy requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldCreateBy: %w", err)
+	}
+	return oldValue.CreateBy, nil
+}
+
+// AddCreateBy adds u to the "create_by" field.
+func (m *ProjectMutation) AddCreateBy(u int64) {
+	if m.addcreate_by != nil {
+		*m.addcreate_by += u
+	} else {
+		m.addcreate_by = &u
+	}
+}
+
+// AddedCreateBy returns the value that was added to the "create_by" field in this mutation.
+func (m *ProjectMutation) AddedCreateBy() (r int64, exists bool) {
+	v := m.addcreate_by
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// ClearCreateBy clears the value of the "create_by" field.
+func (m *ProjectMutation) ClearCreateBy() {
+	m.create_by = nil
+	m.addcreate_by = nil
+	m.clearedFields[project.FieldCreateBy] = struct{}{}
+}
+
+// CreateByCleared returns if the "create_by" field was cleared in this mutation.
+func (m *ProjectMutation) CreateByCleared() bool {
+	_, ok := m.clearedFields[project.FieldCreateBy]
+	return ok
+}
+
+// ResetCreateBy resets all changes to the "create_by" field.
+func (m *ProjectMutation) ResetCreateBy() {
+	m.create_by = nil
+	m.addcreate_by = nil
+	delete(m.clearedFields, project.FieldCreateBy)
+}
+
+// SetCreateTime sets the "create_time" field.
+func (m *ProjectMutation) SetCreateTime(t time.Time) {
+	m.create_time = &t
+}
+
+// CreateTime returns the value of the "create_time" field in the mutation.
+func (m *ProjectMutation) CreateTime() (r time.Time, exists bool) {
+	v := m.create_time
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldCreateTime returns the old "create_time" field's value of the Project entity.
+// If the Project object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *ProjectMutation) OldCreateTime(ctx context.Context) (v time.Time, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldCreateTime is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldCreateTime requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldCreateTime: %w", err)
+	}
+	return oldValue.CreateTime, nil
+}
+
+// ClearCreateTime clears the value of the "create_time" field.
+func (m *ProjectMutation) ClearCreateTime() {
+	m.create_time = nil
+	m.clearedFields[project.FieldCreateTime] = struct{}{}
+}
+
+// CreateTimeCleared returns if the "create_time" field was cleared in this mutation.
+func (m *ProjectMutation) CreateTimeCleared() bool {
+	_, ok := m.clearedFields[project.FieldCreateTime]
+	return ok
+}
+
+// ResetCreateTime resets all changes to the "create_time" field.
+func (m *ProjectMutation) ResetCreateTime() {
+	m.create_time = nil
+	delete(m.clearedFields, project.FieldCreateTime)
+}
+
+// SetUpdateBy sets the "update_by" field.
+func (m *ProjectMutation) SetUpdateBy(u uint64) {
+	m.update_by = &u
+	m.addupdate_by = nil
+}
+
+// UpdateBy returns the value of the "update_by" field in the mutation.
+func (m *ProjectMutation) UpdateBy() (r uint64, exists bool) {
+	v := m.update_by
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldUpdateBy returns the old "update_by" field's value of the Project entity.
+// If the Project object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *ProjectMutation) OldUpdateBy(ctx context.Context) (v uint64, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldUpdateBy is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldUpdateBy requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldUpdateBy: %w", err)
+	}
+	return oldValue.UpdateBy, nil
+}
+
+// AddUpdateBy adds u to the "update_by" field.
+func (m *ProjectMutation) AddUpdateBy(u int64) {
+	if m.addupdate_by != nil {
+		*m.addupdate_by += u
+	} else {
+		m.addupdate_by = &u
+	}
+}
+
+// AddedUpdateBy returns the value that was added to the "update_by" field in this mutation.
+func (m *ProjectMutation) AddedUpdateBy() (r int64, exists bool) {
+	v := m.addupdate_by
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// ClearUpdateBy clears the value of the "update_by" field.
+func (m *ProjectMutation) ClearUpdateBy() {
+	m.update_by = nil
+	m.addupdate_by = nil
+	m.clearedFields[project.FieldUpdateBy] = struct{}{}
+}
+
+// UpdateByCleared returns if the "update_by" field was cleared in this mutation.
+func (m *ProjectMutation) UpdateByCleared() bool {
+	_, ok := m.clearedFields[project.FieldUpdateBy]
+	return ok
+}
+
+// ResetUpdateBy resets all changes to the "update_by" field.
+func (m *ProjectMutation) ResetUpdateBy() {
+	m.update_by = nil
+	m.addupdate_by = nil
+	delete(m.clearedFields, project.FieldUpdateBy)
+}
+
+// SetUpdateTime sets the "update_time" field.
+func (m *ProjectMutation) SetUpdateTime(t time.Time) {
+	m.update_time = &t
+}
+
+// UpdateTime returns the value of the "update_time" field in the mutation.
+func (m *ProjectMutation) UpdateTime() (r time.Time, exists bool) {
+	v := m.update_time
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldUpdateTime returns the old "update_time" field's value of the Project entity.
+// If the Project object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *ProjectMutation) OldUpdateTime(ctx context.Context) (v time.Time, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldUpdateTime is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldUpdateTime requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldUpdateTime: %w", err)
+	}
+	return oldValue.UpdateTime, nil
+}
+
+// ClearUpdateTime clears the value of the "update_time" field.
+func (m *ProjectMutation) ClearUpdateTime() {
+	m.update_time = nil
+	m.clearedFields[project.FieldUpdateTime] = struct{}{}
+}
+
+// UpdateTimeCleared returns if the "update_time" field was cleared in this mutation.
+func (m *ProjectMutation) UpdateTimeCleared() bool {
+	_, ok := m.clearedFields[project.FieldUpdateTime]
+	return ok
+}
+
+// ResetUpdateTime resets all changes to the "update_time" field.
+func (m *ProjectMutation) ResetUpdateTime() {
+	m.update_time = nil
+	delete(m.clearedFields, project.FieldUpdateTime)
+}
+
+// SetTenantID sets the "tenant_id" field.
+func (m *ProjectMutation) SetTenantID(u uint64) {
+	m.tenant_id = &u
+	m.addtenant_id = nil
+}
+
+// TenantID returns the value of the "tenant_id" field in the mutation.
+func (m *ProjectMutation) TenantID() (r uint64, exists bool) {
+	v := m.tenant_id
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldTenantID returns the old "tenant_id" field's value of the Project entity.
+// If the Project object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *ProjectMutation) OldTenantID(ctx context.Context) (v uint64, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldTenantID is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldTenantID requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldTenantID: %w", err)
+	}
+	return oldValue.TenantID, nil
+}
+
+// AddTenantID adds u to the "tenant_id" field.
+func (m *ProjectMutation) AddTenantID(u int64) {
+	if m.addtenant_id != nil {
+		*m.addtenant_id += u
+	} else {
+		m.addtenant_id = &u
+	}
+}
+
+// AddedTenantID returns the value that was added to the "tenant_id" field in this mutation.
+func (m *ProjectMutation) AddedTenantID() (r int64, exists bool) {
+	v := m.addtenant_id
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// ClearTenantID clears the value of the "tenant_id" field.
+func (m *ProjectMutation) ClearTenantID() {
+	m.tenant_id = nil
+	m.addtenant_id = nil
+	m.clearedFields[project.FieldTenantID] = struct{}{}
+}
+
+// TenantIDCleared returns if the "tenant_id" field was cleared in this mutation.
+func (m *ProjectMutation) TenantIDCleared() bool {
+	_, ok := m.clearedFields[project.FieldTenantID]
+	return ok
+}
+
+// ResetTenantID resets all changes to the "tenant_id" field.
+func (m *ProjectMutation) ResetTenantID() {
+	m.tenant_id = nil
+	m.addtenant_id = nil
+	delete(m.clearedFields, project.FieldTenantID)
+}
+
+// SetDeleted sets the "deleted" field.
+func (m *ProjectMutation) SetDeleted(b bool) {
+	m.deleted = &b
+}
+
+// Deleted returns the value of the "deleted" field in the mutation.
+func (m *ProjectMutation) Deleted() (r bool, exists bool) {
+	v := m.deleted
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldDeleted returns the old "deleted" field's value of the Project entity.
+// If the Project object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *ProjectMutation) OldDeleted(ctx context.Context) (v bool, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldDeleted is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldDeleted requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldDeleted: %w", err)
+	}
+	return oldValue.Deleted, nil
+}
+
+// ResetDeleted resets all changes to the "deleted" field.
+func (m *ProjectMutation) ResetDeleted() {
+	m.deleted = nil
+}
+
+// Where appends a list predicates to the ProjectMutation builder.
+func (m *ProjectMutation) Where(ps ...predicate.Project) {
 	m.predicates = append(m.predicates, ps...)
 }
 
-// WhereP appends storage-level predicates to the CostMutation builder. Using this method,
+// WhereP appends storage-level predicates to the ProjectMutation builder. Using this method,
 // users can use type-assertion to append predicates that do not depend on any generated package.
-func (m *CostMutation) WhereP(ps ...func(*sql.Selector)) {
-	p := make([]predicate.Cost, len(ps))
+func (m *ProjectMutation) WhereP(ps ...func(*sql.Selector)) {
+	p := make([]predicate.Project, len(ps))
 	for i := range ps {
 		p[i] = ps[i]
 	}
@@ -151,140 +586,356 @@ func (m *CostMutation) WhereP(ps ...func(*sql.Selector)) {
 }
 
 // Op returns the operation name.
-func (m *CostMutation) Op() Op {
+func (m *ProjectMutation) Op() Op {
 	return m.op
 }
 
 // SetOp allows setting the mutation operation.
-func (m *CostMutation) SetOp(op Op) {
+func (m *ProjectMutation) SetOp(op Op) {
 	m.op = op
 }
 
-// Type returns the node type of this mutation (Cost).
-func (m *CostMutation) Type() string {
+// Type returns the node type of this mutation (Project).
+func (m *ProjectMutation) Type() string {
 	return m.typ
 }
 
 // Fields returns all fields that were changed during this mutation. Note that in
 // order to get all numeric fields that were incremented/decremented, call
 // AddedFields().
-func (m *CostMutation) Fields() []string {
-	fields := make([]string, 0, 0)
+func (m *ProjectMutation) Fields() []string {
+	fields := make([]string, 0, 8)
+	if m.name != nil {
+		fields = append(fields, project.FieldName)
+	}
+	if m.code != nil {
+		fields = append(fields, project.FieldCode)
+	}
+	if m.create_by != nil {
+		fields = append(fields, project.FieldCreateBy)
+	}
+	if m.create_time != nil {
+		fields = append(fields, project.FieldCreateTime)
+	}
+	if m.update_by != nil {
+		fields = append(fields, project.FieldUpdateBy)
+	}
+	if m.update_time != nil {
+		fields = append(fields, project.FieldUpdateTime)
+	}
+	if m.tenant_id != nil {
+		fields = append(fields, project.FieldTenantID)
+	}
+	if m.deleted != nil {
+		fields = append(fields, project.FieldDeleted)
+	}
 	return fields
 }
 
 // Field returns the value of a field with the given name. The second boolean
 // return value indicates that this field was not set, or was not defined in the
 // schema.
-func (m *CostMutation) Field(name string) (ent.Value, bool) {
+func (m *ProjectMutation) Field(name string) (ent.Value, bool) {
+	switch name {
+	case project.FieldName:
+		return m.Name()
+	case project.FieldCode:
+		return m.Code()
+	case project.FieldCreateBy:
+		return m.CreateBy()
+	case project.FieldCreateTime:
+		return m.CreateTime()
+	case project.FieldUpdateBy:
+		return m.UpdateBy()
+	case project.FieldUpdateTime:
+		return m.UpdateTime()
+	case project.FieldTenantID:
+		return m.TenantID()
+	case project.FieldDeleted:
+		return m.Deleted()
+	}
 	return nil, false
 }
 
 // OldField returns the old value of the field from the database. An error is
 // returned if the mutation operation is not UpdateOne, or the query to the
 // database failed.
-func (m *CostMutation) OldField(ctx context.Context, name string) (ent.Value, error) {
-	return nil, fmt.Errorf("unknown Cost field %s", name)
+func (m *ProjectMutation) OldField(ctx context.Context, name string) (ent.Value, error) {
+	switch name {
+	case project.FieldName:
+		return m.OldName(ctx)
+	case project.FieldCode:
+		return m.OldCode(ctx)
+	case project.FieldCreateBy:
+		return m.OldCreateBy(ctx)
+	case project.FieldCreateTime:
+		return m.OldCreateTime(ctx)
+	case project.FieldUpdateBy:
+		return m.OldUpdateBy(ctx)
+	case project.FieldUpdateTime:
+		return m.OldUpdateTime(ctx)
+	case project.FieldTenantID:
+		return m.OldTenantID(ctx)
+	case project.FieldDeleted:
+		return m.OldDeleted(ctx)
+	}
+	return nil, fmt.Errorf("unknown Project field %s", name)
 }
 
 // SetField sets the value of a field with the given name. It returns an error if
 // the field is not defined in the schema, or if the type mismatched the field
 // type.
-func (m *CostMutation) SetField(name string, value ent.Value) error {
+func (m *ProjectMutation) SetField(name string, value ent.Value) error {
 	switch name {
+	case project.FieldName:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetName(v)
+		return nil
+	case project.FieldCode:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetCode(v)
+		return nil
+	case project.FieldCreateBy:
+		v, ok := value.(uint64)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetCreateBy(v)
+		return nil
+	case project.FieldCreateTime:
+		v, ok := value.(time.Time)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetCreateTime(v)
+		return nil
+	case project.FieldUpdateBy:
+		v, ok := value.(uint64)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetUpdateBy(v)
+		return nil
+	case project.FieldUpdateTime:
+		v, ok := value.(time.Time)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetUpdateTime(v)
+		return nil
+	case project.FieldTenantID:
+		v, ok := value.(uint64)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetTenantID(v)
+		return nil
+	case project.FieldDeleted:
+		v, ok := value.(bool)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetDeleted(v)
+		return nil
 	}
-	return fmt.Errorf("unknown Cost field %s", name)
+	return fmt.Errorf("unknown Project field %s", name)
 }
 
 // AddedFields returns all numeric fields that were incremented/decremented during
 // this mutation.
-func (m *CostMutation) AddedFields() []string {
-	return nil
+func (m *ProjectMutation) AddedFields() []string {
+	var fields []string
+	if m.addcreate_by != nil {
+		fields = append(fields, project.FieldCreateBy)
+	}
+	if m.addupdate_by != nil {
+		fields = append(fields, project.FieldUpdateBy)
+	}
+	if m.addtenant_id != nil {
+		fields = append(fields, project.FieldTenantID)
+	}
+	return fields
 }
 
 // AddedField returns the numeric value that was incremented/decremented on a field
 // with the given name. The second boolean return value indicates that this field
 // was not set, or was not defined in the schema.
-func (m *CostMutation) AddedField(name string) (ent.Value, bool) {
+func (m *ProjectMutation) AddedField(name string) (ent.Value, bool) {
+	switch name {
+	case project.FieldCreateBy:
+		return m.AddedCreateBy()
+	case project.FieldUpdateBy:
+		return m.AddedUpdateBy()
+	case project.FieldTenantID:
+		return m.AddedTenantID()
+	}
 	return nil, false
 }
 
 // AddField adds the value to the field with the given name. It returns an error if
 // the field is not defined in the schema, or if the type mismatched the field
 // type.
-func (m *CostMutation) AddField(name string, value ent.Value) error {
-	return fmt.Errorf("unknown Cost numeric field %s", name)
+func (m *ProjectMutation) AddField(name string, value ent.Value) error {
+	switch name {
+	case project.FieldCreateBy:
+		v, ok := value.(int64)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.AddCreateBy(v)
+		return nil
+	case project.FieldUpdateBy:
+		v, ok := value.(int64)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.AddUpdateBy(v)
+		return nil
+	case project.FieldTenantID:
+		v, ok := value.(int64)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.AddTenantID(v)
+		return nil
+	}
+	return fmt.Errorf("unknown Project numeric field %s", name)
 }
 
 // ClearedFields returns all nullable fields that were cleared during this
 // mutation.
-func (m *CostMutation) ClearedFields() []string {
-	return nil
+func (m *ProjectMutation) ClearedFields() []string {
+	var fields []string
+	if m.FieldCleared(project.FieldCreateBy) {
+		fields = append(fields, project.FieldCreateBy)
+	}
+	if m.FieldCleared(project.FieldCreateTime) {
+		fields = append(fields, project.FieldCreateTime)
+	}
+	if m.FieldCleared(project.FieldUpdateBy) {
+		fields = append(fields, project.FieldUpdateBy)
+	}
+	if m.FieldCleared(project.FieldUpdateTime) {
+		fields = append(fields, project.FieldUpdateTime)
+	}
+	if m.FieldCleared(project.FieldTenantID) {
+		fields = append(fields, project.FieldTenantID)
+	}
+	return fields
 }
 
 // FieldCleared returns a boolean indicating if a field with the given name was
 // cleared in this mutation.
-func (m *CostMutation) FieldCleared(name string) bool {
+func (m *ProjectMutation) FieldCleared(name string) bool {
 	_, ok := m.clearedFields[name]
 	return ok
 }
 
 // ClearField clears the value of the field with the given name. It returns an
 // error if the field is not defined in the schema.
-func (m *CostMutation) ClearField(name string) error {
-	return fmt.Errorf("unknown Cost nullable field %s", name)
+func (m *ProjectMutation) ClearField(name string) error {
+	switch name {
+	case project.FieldCreateBy:
+		m.ClearCreateBy()
+		return nil
+	case project.FieldCreateTime:
+		m.ClearCreateTime()
+		return nil
+	case project.FieldUpdateBy:
+		m.ClearUpdateBy()
+		return nil
+	case project.FieldUpdateTime:
+		m.ClearUpdateTime()
+		return nil
+	case project.FieldTenantID:
+		m.ClearTenantID()
+		return nil
+	}
+	return fmt.Errorf("unknown Project nullable field %s", name)
 }
 
 // ResetField resets all changes in the mutation for the field with the given name.
 // It returns an error if the field is not defined in the schema.
-func (m *CostMutation) ResetField(name string) error {
-	return fmt.Errorf("unknown Cost field %s", name)
+func (m *ProjectMutation) ResetField(name string) error {
+	switch name {
+	case project.FieldName:
+		m.ResetName()
+		return nil
+	case project.FieldCode:
+		m.ResetCode()
+		return nil
+	case project.FieldCreateBy:
+		m.ResetCreateBy()
+		return nil
+	case project.FieldCreateTime:
+		m.ResetCreateTime()
+		return nil
+	case project.FieldUpdateBy:
+		m.ResetUpdateBy()
+		return nil
+	case project.FieldUpdateTime:
+		m.ResetUpdateTime()
+		return nil
+	case project.FieldTenantID:
+		m.ResetTenantID()
+		return nil
+	case project.FieldDeleted:
+		m.ResetDeleted()
+		return nil
+	}
+	return fmt.Errorf("unknown Project field %s", name)
 }
 
 // AddedEdges returns all edge names that were set/added in this mutation.
-func (m *CostMutation) AddedEdges() []string {
+func (m *ProjectMutation) AddedEdges() []string {
 	edges := make([]string, 0, 0)
 	return edges
 }
 
 // AddedIDs returns all IDs (to other nodes) that were added for the given edge
 // name in this mutation.
-func (m *CostMutation) AddedIDs(name string) []ent.Value {
+func (m *ProjectMutation) AddedIDs(name string) []ent.Value {
 	return nil
 }
 
 // RemovedEdges returns all edge names that were removed in this mutation.
-func (m *CostMutation) RemovedEdges() []string {
+func (m *ProjectMutation) RemovedEdges() []string {
 	edges := make([]string, 0, 0)
 	return edges
 }
 
 // RemovedIDs returns all IDs (to other nodes) that were removed for the edge with
 // the given name in this mutation.
-func (m *CostMutation) RemovedIDs(name string) []ent.Value {
+func (m *ProjectMutation) RemovedIDs(name string) []ent.Value {
 	return nil
 }
 
 // ClearedEdges returns all edge names that were cleared in this mutation.
-func (m *CostMutation) ClearedEdges() []string {
+func (m *ProjectMutation) ClearedEdges() []string {
 	edges := make([]string, 0, 0)
 	return edges
 }
 
 // EdgeCleared returns a boolean which indicates if the edge with the given name
 // was cleared in this mutation.
-func (m *CostMutation) EdgeCleared(name string) bool {
+func (m *ProjectMutation) EdgeCleared(name string) bool {
 	return false
 }
 
 // ClearEdge clears the value of the edge with the given name. It returns an error
 // if that edge is not defined in the schema.
-func (m *CostMutation) ClearEdge(name string) error {
-	return fmt.Errorf("unknown Cost unique edge %s", name)
+func (m *ProjectMutation) ClearEdge(name string) error {
+	return fmt.Errorf("unknown Project unique edge %s", name)
 }
 
 // ResetEdge resets all changes to the edge with the given name in this mutation.
 // It returns an error if the edge is not defined in the schema.
-func (m *CostMutation) ResetEdge(name string) error {
-	return fmt.Errorf("unknown Cost edge %s", name)
+func (m *ProjectMutation) ResetEdge(name string) error {
+	return fmt.Errorf("unknown Project edge %s", name)
 }

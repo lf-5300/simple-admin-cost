@@ -14,7 +14,9 @@ import (
 	"entgo.io/ent"
 	"entgo.io/ent/dialect"
 	"entgo.io/ent/dialect/sql"
-	"github.com/hf/simple-admin-cost-api/ent/cost"
+	"github.com/hf/simple-admin-cost-api/ent/project"
+
+	stdsql "database/sql"
 )
 
 // Client is the client that holds all ent builders.
@@ -22,8 +24,8 @@ type Client struct {
 	config
 	// Schema is the client for creating, migrating and dropping schema.
 	Schema *migrate.Schema
-	// Cost is the client for interacting with the Cost builders.
-	Cost *CostClient
+	// Project is the client for interacting with the Project builders.
+	Project *ProjectClient
 }
 
 // NewClient creates a new client configured with the given options.
@@ -35,7 +37,7 @@ func NewClient(opts ...Option) *Client {
 
 func (c *Client) init() {
 	c.Schema = migrate.NewSchema(c.driver)
-	c.Cost = NewCostClient(c.config)
+	c.Project = NewProjectClient(c.config)
 }
 
 type (
@@ -126,9 +128,9 @@ func (c *Client) Tx(ctx context.Context) (*Tx, error) {
 	cfg := c.config
 	cfg.driver = tx
 	return &Tx{
-		ctx:    ctx,
-		config: cfg,
-		Cost:   NewCostClient(cfg),
+		ctx:     ctx,
+		config:  cfg,
+		Project: NewProjectClient(cfg),
 	}, nil
 }
 
@@ -146,16 +148,16 @@ func (c *Client) BeginTx(ctx context.Context, opts *sql.TxOptions) (*Tx, error) 
 	cfg := c.config
 	cfg.driver = &txDriver{tx: tx, drv: c.driver}
 	return &Tx{
-		ctx:    ctx,
-		config: cfg,
-		Cost:   NewCostClient(cfg),
+		ctx:     ctx,
+		config:  cfg,
+		Project: NewProjectClient(cfg),
 	}, nil
 }
 
 // Debug returns a new debug-client. It's used to get verbose logging on specific operations.
 //
 //	client.Debug().
-//		Cost.
+//		Project.
 //		Query().
 //		Count(ctx)
 func (c *Client) Debug() *Client {
@@ -177,126 +179,126 @@ func (c *Client) Close() error {
 // Use adds the mutation hooks to all the entity clients.
 // In order to add hooks to a specific client, call: `client.Node.Use(...)`.
 func (c *Client) Use(hooks ...Hook) {
-	c.Cost.Use(hooks...)
+	c.Project.Use(hooks...)
 }
 
 // Intercept adds the query interceptors to all the entity clients.
 // In order to add interceptors to a specific client, call: `client.Node.Intercept(...)`.
 func (c *Client) Intercept(interceptors ...Interceptor) {
-	c.Cost.Intercept(interceptors...)
+	c.Project.Intercept(interceptors...)
 }
 
 // Mutate implements the ent.Mutator interface.
 func (c *Client) Mutate(ctx context.Context, m Mutation) (Value, error) {
 	switch m := m.(type) {
-	case *CostMutation:
-		return c.Cost.mutate(ctx, m)
+	case *ProjectMutation:
+		return c.Project.mutate(ctx, m)
 	default:
 		return nil, fmt.Errorf("ent: unknown mutation type %T", m)
 	}
 }
 
-// CostClient is a client for the Cost schema.
-type CostClient struct {
+// ProjectClient is a client for the Project schema.
+type ProjectClient struct {
 	config
 }
 
-// NewCostClient returns a client for the Cost from the given config.
-func NewCostClient(c config) *CostClient {
-	return &CostClient{config: c}
+// NewProjectClient returns a client for the Project from the given config.
+func NewProjectClient(c config) *ProjectClient {
+	return &ProjectClient{config: c}
 }
 
 // Use adds a list of mutation hooks to the hooks stack.
-// A call to `Use(f, g, h)` equals to `cost.Hooks(f(g(h())))`.
-func (c *CostClient) Use(hooks ...Hook) {
-	c.hooks.Cost = append(c.hooks.Cost, hooks...)
+// A call to `Use(f, g, h)` equals to `project.Hooks(f(g(h())))`.
+func (c *ProjectClient) Use(hooks ...Hook) {
+	c.hooks.Project = append(c.hooks.Project, hooks...)
 }
 
 // Intercept adds a list of query interceptors to the interceptors stack.
-// A call to `Intercept(f, g, h)` equals to `cost.Intercept(f(g(h())))`.
-func (c *CostClient) Intercept(interceptors ...Interceptor) {
-	c.inters.Cost = append(c.inters.Cost, interceptors...)
+// A call to `Intercept(f, g, h)` equals to `project.Intercept(f(g(h())))`.
+func (c *ProjectClient) Intercept(interceptors ...Interceptor) {
+	c.inters.Project = append(c.inters.Project, interceptors...)
 }
 
-// Create returns a builder for creating a Cost entity.
-func (c *CostClient) Create() *CostCreate {
-	mutation := newCostMutation(c.config, OpCreate)
-	return &CostCreate{config: c.config, hooks: c.Hooks(), mutation: mutation}
+// Create returns a builder for creating a Project entity.
+func (c *ProjectClient) Create() *ProjectCreate {
+	mutation := newProjectMutation(c.config, OpCreate)
+	return &ProjectCreate{config: c.config, hooks: c.Hooks(), mutation: mutation}
 }
 
-// CreateBulk returns a builder for creating a bulk of Cost entities.
-func (c *CostClient) CreateBulk(builders ...*CostCreate) *CostCreateBulk {
-	return &CostCreateBulk{config: c.config, builders: builders}
+// CreateBulk returns a builder for creating a bulk of Project entities.
+func (c *ProjectClient) CreateBulk(builders ...*ProjectCreate) *ProjectCreateBulk {
+	return &ProjectCreateBulk{config: c.config, builders: builders}
 }
 
 // MapCreateBulk creates a bulk creation builder from the given slice. For each item in the slice, the function creates
 // a builder and applies setFunc on it.
-func (c *CostClient) MapCreateBulk(slice any, setFunc func(*CostCreate, int)) *CostCreateBulk {
+func (c *ProjectClient) MapCreateBulk(slice any, setFunc func(*ProjectCreate, int)) *ProjectCreateBulk {
 	rv := reflect.ValueOf(slice)
 	if rv.Kind() != reflect.Slice {
-		return &CostCreateBulk{err: fmt.Errorf("calling to CostClient.MapCreateBulk with wrong type %T, need slice", slice)}
+		return &ProjectCreateBulk{err: fmt.Errorf("calling to ProjectClient.MapCreateBulk with wrong type %T, need slice", slice)}
 	}
-	builders := make([]*CostCreate, rv.Len())
+	builders := make([]*ProjectCreate, rv.Len())
 	for i := 0; i < rv.Len(); i++ {
 		builders[i] = c.Create()
 		setFunc(builders[i], i)
 	}
-	return &CostCreateBulk{config: c.config, builders: builders}
+	return &ProjectCreateBulk{config: c.config, builders: builders}
 }
 
-// Update returns an update builder for Cost.
-func (c *CostClient) Update() *CostUpdate {
-	mutation := newCostMutation(c.config, OpUpdate)
-	return &CostUpdate{config: c.config, hooks: c.Hooks(), mutation: mutation}
+// Update returns an update builder for Project.
+func (c *ProjectClient) Update() *ProjectUpdate {
+	mutation := newProjectMutation(c.config, OpUpdate)
+	return &ProjectUpdate{config: c.config, hooks: c.Hooks(), mutation: mutation}
 }
 
 // UpdateOne returns an update builder for the given entity.
-func (c *CostClient) UpdateOne(co *Cost) *CostUpdateOne {
-	mutation := newCostMutation(c.config, OpUpdateOne, withCost(co))
-	return &CostUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
+func (c *ProjectClient) UpdateOne(pr *Project) *ProjectUpdateOne {
+	mutation := newProjectMutation(c.config, OpUpdateOne, withProject(pr))
+	return &ProjectUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
 }
 
 // UpdateOneID returns an update builder for the given id.
-func (c *CostClient) UpdateOneID(id int) *CostUpdateOne {
-	mutation := newCostMutation(c.config, OpUpdateOne, withCostID(id))
-	return &CostUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
+func (c *ProjectClient) UpdateOneID(id uint64) *ProjectUpdateOne {
+	mutation := newProjectMutation(c.config, OpUpdateOne, withProjectID(id))
+	return &ProjectUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
 }
 
-// Delete returns a delete builder for Cost.
-func (c *CostClient) Delete() *CostDelete {
-	mutation := newCostMutation(c.config, OpDelete)
-	return &CostDelete{config: c.config, hooks: c.Hooks(), mutation: mutation}
+// Delete returns a delete builder for Project.
+func (c *ProjectClient) Delete() *ProjectDelete {
+	mutation := newProjectMutation(c.config, OpDelete)
+	return &ProjectDelete{config: c.config, hooks: c.Hooks(), mutation: mutation}
 }
 
 // DeleteOne returns a builder for deleting the given entity.
-func (c *CostClient) DeleteOne(co *Cost) *CostDeleteOne {
-	return c.DeleteOneID(co.ID)
+func (c *ProjectClient) DeleteOne(pr *Project) *ProjectDeleteOne {
+	return c.DeleteOneID(pr.ID)
 }
 
 // DeleteOneID returns a builder for deleting the given entity by its id.
-func (c *CostClient) DeleteOneID(id int) *CostDeleteOne {
-	builder := c.Delete().Where(cost.ID(id))
+func (c *ProjectClient) DeleteOneID(id uint64) *ProjectDeleteOne {
+	builder := c.Delete().Where(project.ID(id))
 	builder.mutation.id = &id
 	builder.mutation.op = OpDeleteOne
-	return &CostDeleteOne{builder}
+	return &ProjectDeleteOne{builder}
 }
 
-// Query returns a query builder for Cost.
-func (c *CostClient) Query() *CostQuery {
-	return &CostQuery{
+// Query returns a query builder for Project.
+func (c *ProjectClient) Query() *ProjectQuery {
+	return &ProjectQuery{
 		config: c.config,
-		ctx:    &QueryContext{Type: TypeCost},
+		ctx:    &QueryContext{Type: TypeProject},
 		inters: c.Interceptors(),
 	}
 }
 
-// Get returns a Cost entity by its id.
-func (c *CostClient) Get(ctx context.Context, id int) (*Cost, error) {
-	return c.Query().Where(cost.ID(id)).Only(ctx)
+// Get returns a Project entity by its id.
+func (c *ProjectClient) Get(ctx context.Context, id uint64) (*Project, error) {
+	return c.Query().Where(project.ID(id)).Only(ctx)
 }
 
 // GetX is like Get, but panics if an error occurs.
-func (c *CostClient) GetX(ctx context.Context, id int) *Cost {
+func (c *ProjectClient) GetX(ctx context.Context, id uint64) *Project {
 	obj, err := c.Get(ctx, id)
 	if err != nil {
 		panic(err)
@@ -305,36 +307,60 @@ func (c *CostClient) GetX(ctx context.Context, id int) *Cost {
 }
 
 // Hooks returns the client hooks.
-func (c *CostClient) Hooks() []Hook {
-	return c.hooks.Cost
+func (c *ProjectClient) Hooks() []Hook {
+	return c.hooks.Project
 }
 
 // Interceptors returns the client interceptors.
-func (c *CostClient) Interceptors() []Interceptor {
-	return c.inters.Cost
+func (c *ProjectClient) Interceptors() []Interceptor {
+	return c.inters.Project
 }
 
-func (c *CostClient) mutate(ctx context.Context, m *CostMutation) (Value, error) {
+func (c *ProjectClient) mutate(ctx context.Context, m *ProjectMutation) (Value, error) {
 	switch m.Op() {
 	case OpCreate:
-		return (&CostCreate{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+		return (&ProjectCreate{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
 	case OpUpdate:
-		return (&CostUpdate{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+		return (&ProjectUpdate{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
 	case OpUpdateOne:
-		return (&CostUpdateOne{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+		return (&ProjectUpdateOne{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
 	case OpDelete, OpDeleteOne:
-		return (&CostDelete{config: c.config, hooks: c.Hooks(), mutation: m}).Exec(ctx)
+		return (&ProjectDelete{config: c.config, hooks: c.Hooks(), mutation: m}).Exec(ctx)
 	default:
-		return nil, fmt.Errorf("ent: unknown Cost mutation op: %q", m.Op())
+		return nil, fmt.Errorf("ent: unknown Project mutation op: %q", m.Op())
 	}
 }
 
 // hooks and interceptors per client, for fast access.
 type (
 	hooks struct {
-		Cost []ent.Hook
+		Project []ent.Hook
 	}
 	inters struct {
-		Cost []ent.Interceptor
+		Project []ent.Interceptor
 	}
 )
+
+// ExecContext allows calling the underlying ExecContext method of the driver if it is supported by it.
+// See, database/sql#DB.ExecContext for more information.
+func (c *config) ExecContext(ctx context.Context, query string, args ...any) (stdsql.Result, error) {
+	ex, ok := c.driver.(interface {
+		ExecContext(context.Context, string, ...any) (stdsql.Result, error)
+	})
+	if !ok {
+		return nil, fmt.Errorf("Driver.ExecContext is not supported")
+	}
+	return ex.ExecContext(ctx, query, args...)
+}
+
+// QueryContext allows calling the underlying QueryContext method of the driver if it is supported by it.
+// See, database/sql#DB.QueryContext for more information.
+func (c *config) QueryContext(ctx context.Context, query string, args ...any) (*stdsql.Rows, error) {
+	q, ok := c.driver.(interface {
+		QueryContext(context.Context, string, ...any) (*stdsql.Rows, error)
+	})
+	if !ok {
+		return nil, fmt.Errorf("Driver.QueryContext is not supported")
+	}
+	return q.QueryContext(ctx, query, args...)
+}
