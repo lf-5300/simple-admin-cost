@@ -5,6 +5,78 @@ package ent
 import "time"
 
 // set field if value's pointer is not nil.
+func (pr *ProjectUpdate) SetNotNilUpdatedAt(value *time.Time) *ProjectUpdate {
+	if value != nil {
+		return pr.SetUpdatedAt(*value)
+	}
+	return pr
+}
+
+// set field if value's pointer is not nil.
+func (pr *ProjectUpdateOne) SetNotNilUpdatedAt(value *time.Time) *ProjectUpdateOne {
+	if value != nil {
+		return pr.SetUpdatedAt(*value)
+	}
+	return pr
+}
+
+// set field if value's pointer is not nil.
+func (pr *ProjectCreate) SetNotNilUpdatedAt(value *time.Time) *ProjectCreate {
+	if value != nil {
+		return pr.SetUpdatedAt(*value)
+	}
+	return pr
+}
+
+// set field if value's pointer is not nil.
+func (pr *ProjectUpdate) SetNotNilUpdateBy(value *string) *ProjectUpdate {
+	if value != nil {
+		return pr.SetUpdateBy(*value)
+	}
+	return pr
+}
+
+// set field if value's pointer is not nil.
+func (pr *ProjectUpdateOne) SetNotNilUpdateBy(value *string) *ProjectUpdateOne {
+	if value != nil {
+		return pr.SetUpdateBy(*value)
+	}
+	return pr
+}
+
+// set field if value's pointer is not nil.
+func (pr *ProjectCreate) SetNotNilUpdateBy(value *string) *ProjectCreate {
+	if value != nil {
+		return pr.SetUpdateBy(*value)
+	}
+	return pr
+}
+
+// set field if value's pointer is not nil.
+func (pr *ProjectUpdate) SetNotNilDeletedAt(value *time.Time) *ProjectUpdate {
+	if value != nil {
+		return pr.SetDeletedAt(*value)
+	}
+	return pr
+}
+
+// set field if value's pointer is not nil.
+func (pr *ProjectUpdateOne) SetNotNilDeletedAt(value *time.Time) *ProjectUpdateOne {
+	if value != nil {
+		return pr.SetDeletedAt(*value)
+	}
+	return pr
+}
+
+// set field if value's pointer is not nil.
+func (pr *ProjectCreate) SetNotNilDeletedAt(value *time.Time) *ProjectCreate {
+	if value != nil {
+		return pr.SetDeletedAt(*value)
+	}
+	return pr
+}
+
+// set field if value's pointer is not nil.
 func (pr *ProjectUpdate) SetNotNilName(value *string) *ProjectUpdate {
 	if value != nil {
 		return pr.SetName(*value)
@@ -48,150 +120,6 @@ func (pr *ProjectUpdateOne) SetNotNilCode(value *string) *ProjectUpdateOne {
 func (pr *ProjectCreate) SetNotNilCode(value *string) *ProjectCreate {
 	if value != nil {
 		return pr.SetCode(*value)
-	}
-	return pr
-}
-
-// set field if value's pointer is not nil.
-func (pr *ProjectUpdate) SetNotNilCreateBy(value *uint64) *ProjectUpdate {
-	if value != nil {
-		return pr.SetCreateBy(*value)
-	}
-	return pr
-}
-
-// set field if value's pointer is not nil.
-func (pr *ProjectUpdateOne) SetNotNilCreateBy(value *uint64) *ProjectUpdateOne {
-	if value != nil {
-		return pr.SetCreateBy(*value)
-	}
-	return pr
-}
-
-// set field if value's pointer is not nil.
-func (pr *ProjectCreate) SetNotNilCreateBy(value *uint64) *ProjectCreate {
-	if value != nil {
-		return pr.SetCreateBy(*value)
-	}
-	return pr
-}
-
-// set field if value's pointer is not nil.
-func (pr *ProjectUpdate) SetNotNilCreateTime(value *time.Time) *ProjectUpdate {
-	if value != nil {
-		return pr.SetCreateTime(*value)
-	}
-	return pr
-}
-
-// set field if value's pointer is not nil.
-func (pr *ProjectUpdateOne) SetNotNilCreateTime(value *time.Time) *ProjectUpdateOne {
-	if value != nil {
-		return pr.SetCreateTime(*value)
-	}
-	return pr
-}
-
-// set field if value's pointer is not nil.
-func (pr *ProjectCreate) SetNotNilCreateTime(value *time.Time) *ProjectCreate {
-	if value != nil {
-		return pr.SetCreateTime(*value)
-	}
-	return pr
-}
-
-// set field if value's pointer is not nil.
-func (pr *ProjectUpdate) SetNotNilUpdateBy(value *uint64) *ProjectUpdate {
-	if value != nil {
-		return pr.SetUpdateBy(*value)
-	}
-	return pr
-}
-
-// set field if value's pointer is not nil.
-func (pr *ProjectUpdateOne) SetNotNilUpdateBy(value *uint64) *ProjectUpdateOne {
-	if value != nil {
-		return pr.SetUpdateBy(*value)
-	}
-	return pr
-}
-
-// set field if value's pointer is not nil.
-func (pr *ProjectCreate) SetNotNilUpdateBy(value *uint64) *ProjectCreate {
-	if value != nil {
-		return pr.SetUpdateBy(*value)
-	}
-	return pr
-}
-
-// set field if value's pointer is not nil.
-func (pr *ProjectUpdate) SetNotNilUpdateTime(value *time.Time) *ProjectUpdate {
-	if value != nil {
-		return pr.SetUpdateTime(*value)
-	}
-	return pr
-}
-
-// set field if value's pointer is not nil.
-func (pr *ProjectUpdateOne) SetNotNilUpdateTime(value *time.Time) *ProjectUpdateOne {
-	if value != nil {
-		return pr.SetUpdateTime(*value)
-	}
-	return pr
-}
-
-// set field if value's pointer is not nil.
-func (pr *ProjectCreate) SetNotNilUpdateTime(value *time.Time) *ProjectCreate {
-	if value != nil {
-		return pr.SetUpdateTime(*value)
-	}
-	return pr
-}
-
-// set field if value's pointer is not nil.
-func (pr *ProjectUpdate) SetNotNilTenantID(value *uint64) *ProjectUpdate {
-	if value != nil {
-		return pr.SetTenantID(*value)
-	}
-	return pr
-}
-
-// set field if value's pointer is not nil.
-func (pr *ProjectUpdateOne) SetNotNilTenantID(value *uint64) *ProjectUpdateOne {
-	if value != nil {
-		return pr.SetTenantID(*value)
-	}
-	return pr
-}
-
-// set field if value's pointer is not nil.
-func (pr *ProjectCreate) SetNotNilTenantID(value *uint64) *ProjectCreate {
-	if value != nil {
-		return pr.SetTenantID(*value)
-	}
-	return pr
-}
-
-// set field if value's pointer is not nil.
-func (pr *ProjectUpdate) SetNotNilDeleted(value *bool) *ProjectUpdate {
-	if value != nil {
-		return pr.SetDeleted(*value)
-	}
-	return pr
-}
-
-// set field if value's pointer is not nil.
-func (pr *ProjectUpdateOne) SetNotNilDeleted(value *bool) *ProjectUpdateOne {
-	if value != nil {
-		return pr.SetDeleted(*value)
-	}
-	return pr
-}
-
-// set field if value's pointer is not nil.
-func (pr *ProjectCreate) SetNotNilDeleted(value *bool) *ProjectCreate {
-	if value != nil {
-		return pr.SetDeleted(*value)
 	}
 	return pr
 }

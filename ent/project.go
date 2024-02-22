@@ -16,24 +16,21 @@ import (
 type Project struct {
 	config `json:"-"`
 	// ID of the ent.
-	// 主键
 	ID uint64 `json:"id,omitempty"`
+	// Create Time | 创建日期
+	CreatedAt time.Time `json:"created_at,omitempty"`
+	// Update Time | 修改日期
+	UpdatedAt time.Time `json:"updated_at,omitempty"`
+	// 创建人
+	CreateBy string `json:"create_by,omitempty"`
+	// 修改人
+	UpdateBy string `json:"update_by,omitempty"`
+	// Delete Time | 删除日期
+	DeletedAt time.Time `json:"deleted_at,omitempty"`
 	// 项目名称
 	Name string `json:"name,omitempty"`
 	// 项目编码
-	Code string `json:"code,omitempty"`
-	// 创建人
-	CreateBy uint64 `json:"create_by,omitempty"`
-	// 创建时间
-	CreateTime time.Time `json:"create_time,omitempty"`
-	// 更新人
-	UpdateBy uint64 `json:"update_by,omitempty"`
-	// 更新时间
-	UpdateTime time.Time `json:"update_time,omitempty"`
-	// 租户号
-	TenantID uint64 `json:"tenant_id,omitempty"`
-	// 是否删除
-	Deleted      bool `json:"deleted,omitempty"`
+	Code         string `json:"code,omitempty"`
 	selectValues sql.SelectValues
 }
 
@@ -42,13 +39,11 @@ func (*Project) scanValues(columns []string) ([]any, error) {
 	values := make([]any, len(columns))
 	for i := range columns {
 		switch columns[i] {
-		case project.FieldDeleted:
-			values[i] = new(sql.NullBool)
-		case project.FieldID, project.FieldCreateBy, project.FieldUpdateBy, project.FieldTenantID:
+		case project.FieldID:
 			values[i] = new(sql.NullInt64)
-		case project.FieldName, project.FieldCode:
+		case project.FieldCreateBy, project.FieldUpdateBy, project.FieldName, project.FieldCode:
 			values[i] = new(sql.NullString)
-		case project.FieldCreateTime, project.FieldUpdateTime:
+		case project.FieldCreatedAt, project.FieldUpdatedAt, project.FieldDeletedAt:
 			values[i] = new(sql.NullTime)
 		default:
 			values[i] = new(sql.UnknownType)
@@ -71,6 +66,36 @@ func (pr *Project) assignValues(columns []string, values []any) error {
 				return fmt.Errorf("unexpected type %T for field id", value)
 			}
 			pr.ID = uint64(value.Int64)
+		case project.FieldCreatedAt:
+			if value, ok := values[i].(*sql.NullTime); !ok {
+				return fmt.Errorf("unexpected type %T for field created_at", values[i])
+			} else if value.Valid {
+				pr.CreatedAt = value.Time
+			}
+		case project.FieldUpdatedAt:
+			if value, ok := values[i].(*sql.NullTime); !ok {
+				return fmt.Errorf("unexpected type %T for field updated_at", values[i])
+			} else if value.Valid {
+				pr.UpdatedAt = value.Time
+			}
+		case project.FieldCreateBy:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field create_by", values[i])
+			} else if value.Valid {
+				pr.CreateBy = value.String
+			}
+		case project.FieldUpdateBy:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field update_by", values[i])
+			} else if value.Valid {
+				pr.UpdateBy = value.String
+			}
+		case project.FieldDeletedAt:
+			if value, ok := values[i].(*sql.NullTime); !ok {
+				return fmt.Errorf("unexpected type %T for field deleted_at", values[i])
+			} else if value.Valid {
+				pr.DeletedAt = value.Time
+			}
 		case project.FieldName:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field name", values[i])
@@ -82,42 +107,6 @@ func (pr *Project) assignValues(columns []string, values []any) error {
 				return fmt.Errorf("unexpected type %T for field code", values[i])
 			} else if value.Valid {
 				pr.Code = value.String
-			}
-		case project.FieldCreateBy:
-			if value, ok := values[i].(*sql.NullInt64); !ok {
-				return fmt.Errorf("unexpected type %T for field create_by", values[i])
-			} else if value.Valid {
-				pr.CreateBy = uint64(value.Int64)
-			}
-		case project.FieldCreateTime:
-			if value, ok := values[i].(*sql.NullTime); !ok {
-				return fmt.Errorf("unexpected type %T for field create_time", values[i])
-			} else if value.Valid {
-				pr.CreateTime = value.Time
-			}
-		case project.FieldUpdateBy:
-			if value, ok := values[i].(*sql.NullInt64); !ok {
-				return fmt.Errorf("unexpected type %T for field update_by", values[i])
-			} else if value.Valid {
-				pr.UpdateBy = uint64(value.Int64)
-			}
-		case project.FieldUpdateTime:
-			if value, ok := values[i].(*sql.NullTime); !ok {
-				return fmt.Errorf("unexpected type %T for field update_time", values[i])
-			} else if value.Valid {
-				pr.UpdateTime = value.Time
-			}
-		case project.FieldTenantID:
-			if value, ok := values[i].(*sql.NullInt64); !ok {
-				return fmt.Errorf("unexpected type %T for field tenant_id", values[i])
-			} else if value.Valid {
-				pr.TenantID = uint64(value.Int64)
-			}
-		case project.FieldDeleted:
-			if value, ok := values[i].(*sql.NullBool); !ok {
-				return fmt.Errorf("unexpected type %T for field deleted", values[i])
-			} else if value.Valid {
-				pr.Deleted = value.Bool
 			}
 		default:
 			pr.selectValues.Set(columns[i], values[i])
@@ -155,29 +144,26 @@ func (pr *Project) String() string {
 	var builder strings.Builder
 	builder.WriteString("Project(")
 	builder.WriteString(fmt.Sprintf("id=%v, ", pr.ID))
+	builder.WriteString("created_at=")
+	builder.WriteString(pr.CreatedAt.Format(time.ANSIC))
+	builder.WriteString(", ")
+	builder.WriteString("updated_at=")
+	builder.WriteString(pr.UpdatedAt.Format(time.ANSIC))
+	builder.WriteString(", ")
+	builder.WriteString("create_by=")
+	builder.WriteString(pr.CreateBy)
+	builder.WriteString(", ")
+	builder.WriteString("update_by=")
+	builder.WriteString(pr.UpdateBy)
+	builder.WriteString(", ")
+	builder.WriteString("deleted_at=")
+	builder.WriteString(pr.DeletedAt.Format(time.ANSIC))
+	builder.WriteString(", ")
 	builder.WriteString("name=")
 	builder.WriteString(pr.Name)
 	builder.WriteString(", ")
 	builder.WriteString("code=")
 	builder.WriteString(pr.Code)
-	builder.WriteString(", ")
-	builder.WriteString("create_by=")
-	builder.WriteString(fmt.Sprintf("%v", pr.CreateBy))
-	builder.WriteString(", ")
-	builder.WriteString("create_time=")
-	builder.WriteString(pr.CreateTime.Format(time.ANSIC))
-	builder.WriteString(", ")
-	builder.WriteString("update_by=")
-	builder.WriteString(fmt.Sprintf("%v", pr.UpdateBy))
-	builder.WriteString(", ")
-	builder.WriteString("update_time=")
-	builder.WriteString(pr.UpdateTime.Format(time.ANSIC))
-	builder.WriteString(", ")
-	builder.WriteString("tenant_id=")
-	builder.WriteString(fmt.Sprintf("%v", pr.TenantID))
-	builder.WriteString(", ")
-	builder.WriteString("deleted=")
-	builder.WriteString(fmt.Sprintf("%v", pr.Deleted))
 	builder.WriteByte(')')
 	return builder.String()
 }

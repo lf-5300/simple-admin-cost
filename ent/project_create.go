@@ -20,6 +20,68 @@ type ProjectCreate struct {
 	hooks    []Hook
 }
 
+// SetCreatedAt sets the "created_at" field.
+func (pc *ProjectCreate) SetCreatedAt(t time.Time) *ProjectCreate {
+	pc.mutation.SetCreatedAt(t)
+	return pc
+}
+
+// SetNillableCreatedAt sets the "created_at" field if the given value is not nil.
+func (pc *ProjectCreate) SetNillableCreatedAt(t *time.Time) *ProjectCreate {
+	if t != nil {
+		pc.SetCreatedAt(*t)
+	}
+	return pc
+}
+
+// SetUpdatedAt sets the "updated_at" field.
+func (pc *ProjectCreate) SetUpdatedAt(t time.Time) *ProjectCreate {
+	pc.mutation.SetUpdatedAt(t)
+	return pc
+}
+
+// SetNillableUpdatedAt sets the "updated_at" field if the given value is not nil.
+func (pc *ProjectCreate) SetNillableUpdatedAt(t *time.Time) *ProjectCreate {
+	if t != nil {
+		pc.SetUpdatedAt(*t)
+	}
+	return pc
+}
+
+// SetCreateBy sets the "create_by" field.
+func (pc *ProjectCreate) SetCreateBy(s string) *ProjectCreate {
+	pc.mutation.SetCreateBy(s)
+	return pc
+}
+
+// SetUpdateBy sets the "update_by" field.
+func (pc *ProjectCreate) SetUpdateBy(s string) *ProjectCreate {
+	pc.mutation.SetUpdateBy(s)
+	return pc
+}
+
+// SetNillableUpdateBy sets the "update_by" field if the given value is not nil.
+func (pc *ProjectCreate) SetNillableUpdateBy(s *string) *ProjectCreate {
+	if s != nil {
+		pc.SetUpdateBy(*s)
+	}
+	return pc
+}
+
+// SetDeletedAt sets the "deleted_at" field.
+func (pc *ProjectCreate) SetDeletedAt(t time.Time) *ProjectCreate {
+	pc.mutation.SetDeletedAt(t)
+	return pc
+}
+
+// SetNillableDeletedAt sets the "deleted_at" field if the given value is not nil.
+func (pc *ProjectCreate) SetNillableDeletedAt(t *time.Time) *ProjectCreate {
+	if t != nil {
+		pc.SetDeletedAt(*t)
+	}
+	return pc
+}
+
 // SetName sets the "name" field.
 func (pc *ProjectCreate) SetName(s string) *ProjectCreate {
 	pc.mutation.SetName(s)
@@ -32,85 +94,17 @@ func (pc *ProjectCreate) SetCode(s string) *ProjectCreate {
 	return pc
 }
 
-// SetCreateBy sets the "create_by" field.
-func (pc *ProjectCreate) SetCreateBy(u uint64) *ProjectCreate {
-	pc.mutation.SetCreateBy(u)
-	return pc
-}
-
-// SetNillableCreateBy sets the "create_by" field if the given value is not nil.
-func (pc *ProjectCreate) SetNillableCreateBy(u *uint64) *ProjectCreate {
-	if u != nil {
-		pc.SetCreateBy(*u)
-	}
-	return pc
-}
-
-// SetCreateTime sets the "create_time" field.
-func (pc *ProjectCreate) SetCreateTime(t time.Time) *ProjectCreate {
-	pc.mutation.SetCreateTime(t)
-	return pc
-}
-
-// SetNillableCreateTime sets the "create_time" field if the given value is not nil.
-func (pc *ProjectCreate) SetNillableCreateTime(t *time.Time) *ProjectCreate {
-	if t != nil {
-		pc.SetCreateTime(*t)
-	}
-	return pc
-}
-
-// SetUpdateBy sets the "update_by" field.
-func (pc *ProjectCreate) SetUpdateBy(u uint64) *ProjectCreate {
-	pc.mutation.SetUpdateBy(u)
-	return pc
-}
-
-// SetNillableUpdateBy sets the "update_by" field if the given value is not nil.
-func (pc *ProjectCreate) SetNillableUpdateBy(u *uint64) *ProjectCreate {
-	if u != nil {
-		pc.SetUpdateBy(*u)
-	}
-	return pc
-}
-
-// SetUpdateTime sets the "update_time" field.
-func (pc *ProjectCreate) SetUpdateTime(t time.Time) *ProjectCreate {
-	pc.mutation.SetUpdateTime(t)
-	return pc
-}
-
-// SetNillableUpdateTime sets the "update_time" field if the given value is not nil.
-func (pc *ProjectCreate) SetNillableUpdateTime(t *time.Time) *ProjectCreate {
-	if t != nil {
-		pc.SetUpdateTime(*t)
-	}
-	return pc
-}
-
-// SetTenantID sets the "tenant_id" field.
-func (pc *ProjectCreate) SetTenantID(u uint64) *ProjectCreate {
-	pc.mutation.SetTenantID(u)
-	return pc
-}
-
-// SetNillableTenantID sets the "tenant_id" field if the given value is not nil.
-func (pc *ProjectCreate) SetNillableTenantID(u *uint64) *ProjectCreate {
-	if u != nil {
-		pc.SetTenantID(*u)
-	}
-	return pc
-}
-
-// SetDeleted sets the "deleted" field.
-func (pc *ProjectCreate) SetDeleted(b bool) *ProjectCreate {
-	pc.mutation.SetDeleted(b)
-	return pc
-}
-
 // SetID sets the "id" field.
 func (pc *ProjectCreate) SetID(u uint64) *ProjectCreate {
 	pc.mutation.SetID(u)
+	return pc
+}
+
+// SetNillableID sets the "id" field if the given value is not nil.
+func (pc *ProjectCreate) SetNillableID(u *uint64) *ProjectCreate {
+	if u != nil {
+		pc.SetID(*u)
+	}
 	return pc
 }
 
@@ -121,6 +115,9 @@ func (pc *ProjectCreate) Mutation() *ProjectMutation {
 
 // Save creates the Project in the database.
 func (pc *ProjectCreate) Save(ctx context.Context) (*Project, error) {
+	if err := pc.defaults(); err != nil {
+		return nil, err
+	}
 	return withHooks(ctx, pc.sqlSave, pc.mutation, pc.hooks)
 }
 
@@ -146,16 +143,35 @@ func (pc *ProjectCreate) ExecX(ctx context.Context) {
 	}
 }
 
+// defaults sets the default values of the builder before save.
+func (pc *ProjectCreate) defaults() error {
+	if _, ok := pc.mutation.CreatedAt(); !ok {
+		if project.DefaultCreatedAt == nil {
+			return fmt.Errorf("ent: uninitialized project.DefaultCreatedAt (forgotten import ent/runtime?)")
+		}
+		v := project.DefaultCreatedAt()
+		pc.mutation.SetCreatedAt(v)
+	}
+	if _, ok := pc.mutation.ID(); !ok {
+		v := project.DefaultID
+		pc.mutation.SetID(v)
+	}
+	return nil
+}
+
 // check runs all checks and user-defined validators on the builder.
 func (pc *ProjectCreate) check() error {
+	if _, ok := pc.mutation.CreatedAt(); !ok {
+		return &ValidationError{Name: "created_at", err: errors.New(`ent: missing required field "Project.created_at"`)}
+	}
+	if _, ok := pc.mutation.CreateBy(); !ok {
+		return &ValidationError{Name: "create_by", err: errors.New(`ent: missing required field "Project.create_by"`)}
+	}
 	if _, ok := pc.mutation.Name(); !ok {
 		return &ValidationError{Name: "name", err: errors.New(`ent: missing required field "Project.name"`)}
 	}
 	if _, ok := pc.mutation.Code(); !ok {
 		return &ValidationError{Name: "code", err: errors.New(`ent: missing required field "Project.code"`)}
-	}
-	if _, ok := pc.mutation.Deleted(); !ok {
-		return &ValidationError{Name: "deleted", err: errors.New(`ent: missing required field "Project.deleted"`)}
 	}
 	return nil
 }
@@ -189,6 +205,26 @@ func (pc *ProjectCreate) createSpec() (*Project, *sqlgraph.CreateSpec) {
 		_node.ID = id
 		_spec.ID.Value = id
 	}
+	if value, ok := pc.mutation.CreatedAt(); ok {
+		_spec.SetField(project.FieldCreatedAt, field.TypeTime, value)
+		_node.CreatedAt = value
+	}
+	if value, ok := pc.mutation.UpdatedAt(); ok {
+		_spec.SetField(project.FieldUpdatedAt, field.TypeTime, value)
+		_node.UpdatedAt = value
+	}
+	if value, ok := pc.mutation.CreateBy(); ok {
+		_spec.SetField(project.FieldCreateBy, field.TypeString, value)
+		_node.CreateBy = value
+	}
+	if value, ok := pc.mutation.UpdateBy(); ok {
+		_spec.SetField(project.FieldUpdateBy, field.TypeString, value)
+		_node.UpdateBy = value
+	}
+	if value, ok := pc.mutation.DeletedAt(); ok {
+		_spec.SetField(project.FieldDeletedAt, field.TypeTime, value)
+		_node.DeletedAt = value
+	}
 	if value, ok := pc.mutation.Name(); ok {
 		_spec.SetField(project.FieldName, field.TypeString, value)
 		_node.Name = value
@@ -196,30 +232,6 @@ func (pc *ProjectCreate) createSpec() (*Project, *sqlgraph.CreateSpec) {
 	if value, ok := pc.mutation.Code(); ok {
 		_spec.SetField(project.FieldCode, field.TypeString, value)
 		_node.Code = value
-	}
-	if value, ok := pc.mutation.CreateBy(); ok {
-		_spec.SetField(project.FieldCreateBy, field.TypeUint64, value)
-		_node.CreateBy = value
-	}
-	if value, ok := pc.mutation.CreateTime(); ok {
-		_spec.SetField(project.FieldCreateTime, field.TypeTime, value)
-		_node.CreateTime = value
-	}
-	if value, ok := pc.mutation.UpdateBy(); ok {
-		_spec.SetField(project.FieldUpdateBy, field.TypeUint64, value)
-		_node.UpdateBy = value
-	}
-	if value, ok := pc.mutation.UpdateTime(); ok {
-		_spec.SetField(project.FieldUpdateTime, field.TypeTime, value)
-		_node.UpdateTime = value
-	}
-	if value, ok := pc.mutation.TenantID(); ok {
-		_spec.SetField(project.FieldTenantID, field.TypeUint64, value)
-		_node.TenantID = value
-	}
-	if value, ok := pc.mutation.Deleted(); ok {
-		_spec.SetField(project.FieldDeleted, field.TypeBool, value)
-		_node.Deleted = value
 	}
 	return _node, _spec
 }
@@ -242,6 +254,7 @@ func (pcb *ProjectCreateBulk) Save(ctx context.Context) ([]*Project, error) {
 	for i := range pcb.builders {
 		func(i int, root context.Context) {
 			builder := pcb.builders[i]
+			builder.defaults()
 			var mut Mutator = MutateFunc(func(ctx context.Context, m Mutation) (Value, error) {
 				mutation, ok := m.(*ProjectMutation)
 				if !ok {

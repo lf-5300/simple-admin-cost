@@ -31,10 +31,15 @@ DatabaseConf:
   DBName: simple-admin-cost
   Username: root # set your username
   Password: fqyyj.mysql # set your password
+  MysqlConfig: '&charset=utf8&loc=Asia%2FShanghai'
   MaxOpenConn: 100
   SSLMode: disable
   CacheTime: 5
 
+CoreRpc:
+  Endpoints:
+    - 127.0.0.1:9101
+  Enabled: true
 #CoreRpc:
 #  Target: k8s://default/core-rpc-svc:9101
 #  Enabled: true
@@ -48,9 +53,10 @@ CasbinDatabaseConf:
   Type: mysql
   Host: 127.0.0.1
   Port: 3306
-  DBName: simple-admin-cost
+  DBName: simple_admin
   Username: root # set your username
   Password: fqyyj.mysql # set your password
+  MysqlConfig: '&charset=utf8&loc=Asia%2FShanghai'
   MaxOpenConn: 100
   SSLMode: disable
   CacheTime: 5

@@ -372,26 +372,14 @@
         },
         "createBy": {
           "description": "创建人",
-          "type": "integer",
-          "format": "uint64",
+          "type": "string",
           "x-go-name": "CreateBy"
-        },
-        "createTime": {
-          "description": "创建时间",
-          "type": "integer",
-          "format": "int64",
-          "x-go-name": "CreateTime"
         },
         "createdAt": {
           "description": "Create date | 创建日期",
           "type": "integer",
           "format": "int64",
           "x-go-name": "CreatedAt"
-        },
-        "deleted": {
-          "description": "是否删除",
-          "type": "boolean",
-          "x-go-name": "Deleted"
         },
         "id": {
           "description": "ID",
@@ -404,23 +392,10 @@
           "type": "string",
           "x-go-name": "Name"
         },
-        "tenantId": {
-          "description": "租户号",
-          "type": "integer",
-          "format": "uint64",
-          "x-go-name": "TenantId"
-        },
         "updateBy": {
-          "description": "更新人",
-          "type": "integer",
-          "format": "uint64",
+          "description": "修改人",
+          "type": "string",
           "x-go-name": "UpdateBy"
-        },
-        "updateTime": {
-          "description": "更新时间",
-          "type": "integer",
-          "format": "int64",
-          "x-go-name": "UpdateTime"
         },
         "updatedAt": {
           "description": "Update date | 更新日期",
@@ -484,10 +459,10 @@
         "pageSize"
       ],
       "properties": {
-        "code": {
-          "description": "项目编码",
+        "createBy": {
+          "description": "创建人",
           "type": "string",
-          "x-go-name": "Code"
+          "x-go-name": "CreateBy"
         },
         "name": {
           "description": "项目名称",
@@ -507,6 +482,11 @@
           "format": "uint64",
           "maximum": 100000,
           "x-go-name": "PageSize"
+        },
+        "updateBy": {
+          "description": "修改人",
+          "type": "string",
+          "x-go-name": "UpdateBy"
         }
       },
       "x-go-package": "github.com/hf/simple-admin-cost-api/internal/types"

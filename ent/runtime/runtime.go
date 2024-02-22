@@ -2,7 +2,41 @@
 
 package runtime
 
-// The schema-stitching logic is generated in github.com/hf/simple-admin-cost-api/ent/runtime.go
+import (
+	"time"
+
+	"github.com/hf/simple-admin-cost-api/ent/project"
+	"github.com/hf/simple-admin-cost-api/ent/schema"
+)
+
+// The init function reads all schema descriptors with runtime code
+// (default values, validators, hooks and policies) and stitches it
+// to their package variables.
+func init() {
+	projectMixin := schema.Project{}.Mixin()
+	projectMixinHooks0 := projectMixin[0].Hooks()
+	projectMixinHooks1 := projectMixin[1].Hooks()
+	project.Hooks[0] = projectMixinHooks0[0]
+	project.Hooks[1] = projectMixinHooks1[0]
+	projectMixinInters1 := projectMixin[1].Interceptors()
+	project.Interceptors[0] = projectMixinInters1[0]
+	projectMixinFields0 := projectMixin[0].Fields()
+	_ = projectMixinFields0
+	projectFields := schema.Project{}.Fields()
+	_ = projectFields
+	// projectDescCreatedAt is the schema descriptor for created_at field.
+	projectDescCreatedAt := projectMixinFields0[1].Descriptor()
+	// project.DefaultCreatedAt holds the default value on creation for the created_at field.
+	project.DefaultCreatedAt = projectDescCreatedAt.Default.(func() time.Time)
+	// projectDescUpdatedAt is the schema descriptor for updated_at field.
+	projectDescUpdatedAt := projectMixinFields0[2].Descriptor()
+	// project.UpdateDefaultUpdatedAt holds the default value on update for the updated_at field.
+	project.UpdateDefaultUpdatedAt = projectDescUpdatedAt.UpdateDefault.(func() time.Time)
+	// projectDescID is the schema descriptor for id field.
+	projectDescID := projectMixinFields0[0].Descriptor()
+	// project.DefaultID holds the default value on creation for the id field.
+	project.DefaultID = projectDescID.Default.(uint64)
+}
 
 const (
 	Version = "v0.13.0"                                         // Version of ent codegen.

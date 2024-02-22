@@ -28,6 +28,58 @@ func (pu *ProjectUpdate) Where(ps ...predicate.Project) *ProjectUpdate {
 	return pu
 }
 
+// SetUpdatedAt sets the "updated_at" field.
+func (pu *ProjectUpdate) SetUpdatedAt(t time.Time) *ProjectUpdate {
+	pu.mutation.SetUpdatedAt(t)
+	return pu
+}
+
+// ClearUpdatedAt clears the value of the "updated_at" field.
+func (pu *ProjectUpdate) ClearUpdatedAt() *ProjectUpdate {
+	pu.mutation.ClearUpdatedAt()
+	return pu
+}
+
+// SetUpdateBy sets the "update_by" field.
+func (pu *ProjectUpdate) SetUpdateBy(s string) *ProjectUpdate {
+	pu.mutation.SetUpdateBy(s)
+	return pu
+}
+
+// SetNillableUpdateBy sets the "update_by" field if the given value is not nil.
+func (pu *ProjectUpdate) SetNillableUpdateBy(s *string) *ProjectUpdate {
+	if s != nil {
+		pu.SetUpdateBy(*s)
+	}
+	return pu
+}
+
+// ClearUpdateBy clears the value of the "update_by" field.
+func (pu *ProjectUpdate) ClearUpdateBy() *ProjectUpdate {
+	pu.mutation.ClearUpdateBy()
+	return pu
+}
+
+// SetDeletedAt sets the "deleted_at" field.
+func (pu *ProjectUpdate) SetDeletedAt(t time.Time) *ProjectUpdate {
+	pu.mutation.SetDeletedAt(t)
+	return pu
+}
+
+// SetNillableDeletedAt sets the "deleted_at" field if the given value is not nil.
+func (pu *ProjectUpdate) SetNillableDeletedAt(t *time.Time) *ProjectUpdate {
+	if t != nil {
+		pu.SetDeletedAt(*t)
+	}
+	return pu
+}
+
+// ClearDeletedAt clears the value of the "deleted_at" field.
+func (pu *ProjectUpdate) ClearDeletedAt() *ProjectUpdate {
+	pu.mutation.ClearDeletedAt()
+	return pu
+}
+
 // SetName sets the "name" field.
 func (pu *ProjectUpdate) SetName(s string) *ProjectUpdate {
 	pu.mutation.SetName(s)
@@ -56,141 +108,6 @@ func (pu *ProjectUpdate) SetNillableCode(s *string) *ProjectUpdate {
 	return pu
 }
 
-// SetCreateBy sets the "create_by" field.
-func (pu *ProjectUpdate) SetCreateBy(u uint64) *ProjectUpdate {
-	pu.mutation.ResetCreateBy()
-	pu.mutation.SetCreateBy(u)
-	return pu
-}
-
-// SetNillableCreateBy sets the "create_by" field if the given value is not nil.
-func (pu *ProjectUpdate) SetNillableCreateBy(u *uint64) *ProjectUpdate {
-	if u != nil {
-		pu.SetCreateBy(*u)
-	}
-	return pu
-}
-
-// AddCreateBy adds u to the "create_by" field.
-func (pu *ProjectUpdate) AddCreateBy(u int64) *ProjectUpdate {
-	pu.mutation.AddCreateBy(u)
-	return pu
-}
-
-// ClearCreateBy clears the value of the "create_by" field.
-func (pu *ProjectUpdate) ClearCreateBy() *ProjectUpdate {
-	pu.mutation.ClearCreateBy()
-	return pu
-}
-
-// SetCreateTime sets the "create_time" field.
-func (pu *ProjectUpdate) SetCreateTime(t time.Time) *ProjectUpdate {
-	pu.mutation.SetCreateTime(t)
-	return pu
-}
-
-// SetNillableCreateTime sets the "create_time" field if the given value is not nil.
-func (pu *ProjectUpdate) SetNillableCreateTime(t *time.Time) *ProjectUpdate {
-	if t != nil {
-		pu.SetCreateTime(*t)
-	}
-	return pu
-}
-
-// ClearCreateTime clears the value of the "create_time" field.
-func (pu *ProjectUpdate) ClearCreateTime() *ProjectUpdate {
-	pu.mutation.ClearCreateTime()
-	return pu
-}
-
-// SetUpdateBy sets the "update_by" field.
-func (pu *ProjectUpdate) SetUpdateBy(u uint64) *ProjectUpdate {
-	pu.mutation.ResetUpdateBy()
-	pu.mutation.SetUpdateBy(u)
-	return pu
-}
-
-// SetNillableUpdateBy sets the "update_by" field if the given value is not nil.
-func (pu *ProjectUpdate) SetNillableUpdateBy(u *uint64) *ProjectUpdate {
-	if u != nil {
-		pu.SetUpdateBy(*u)
-	}
-	return pu
-}
-
-// AddUpdateBy adds u to the "update_by" field.
-func (pu *ProjectUpdate) AddUpdateBy(u int64) *ProjectUpdate {
-	pu.mutation.AddUpdateBy(u)
-	return pu
-}
-
-// ClearUpdateBy clears the value of the "update_by" field.
-func (pu *ProjectUpdate) ClearUpdateBy() *ProjectUpdate {
-	pu.mutation.ClearUpdateBy()
-	return pu
-}
-
-// SetUpdateTime sets the "update_time" field.
-func (pu *ProjectUpdate) SetUpdateTime(t time.Time) *ProjectUpdate {
-	pu.mutation.SetUpdateTime(t)
-	return pu
-}
-
-// SetNillableUpdateTime sets the "update_time" field if the given value is not nil.
-func (pu *ProjectUpdate) SetNillableUpdateTime(t *time.Time) *ProjectUpdate {
-	if t != nil {
-		pu.SetUpdateTime(*t)
-	}
-	return pu
-}
-
-// ClearUpdateTime clears the value of the "update_time" field.
-func (pu *ProjectUpdate) ClearUpdateTime() *ProjectUpdate {
-	pu.mutation.ClearUpdateTime()
-	return pu
-}
-
-// SetTenantID sets the "tenant_id" field.
-func (pu *ProjectUpdate) SetTenantID(u uint64) *ProjectUpdate {
-	pu.mutation.ResetTenantID()
-	pu.mutation.SetTenantID(u)
-	return pu
-}
-
-// SetNillableTenantID sets the "tenant_id" field if the given value is not nil.
-func (pu *ProjectUpdate) SetNillableTenantID(u *uint64) *ProjectUpdate {
-	if u != nil {
-		pu.SetTenantID(*u)
-	}
-	return pu
-}
-
-// AddTenantID adds u to the "tenant_id" field.
-func (pu *ProjectUpdate) AddTenantID(u int64) *ProjectUpdate {
-	pu.mutation.AddTenantID(u)
-	return pu
-}
-
-// ClearTenantID clears the value of the "tenant_id" field.
-func (pu *ProjectUpdate) ClearTenantID() *ProjectUpdate {
-	pu.mutation.ClearTenantID()
-	return pu
-}
-
-// SetDeleted sets the "deleted" field.
-func (pu *ProjectUpdate) SetDeleted(b bool) *ProjectUpdate {
-	pu.mutation.SetDeleted(b)
-	return pu
-}
-
-// SetNillableDeleted sets the "deleted" field if the given value is not nil.
-func (pu *ProjectUpdate) SetNillableDeleted(b *bool) *ProjectUpdate {
-	if b != nil {
-		pu.SetDeleted(*b)
-	}
-	return pu
-}
-
 // Mutation returns the ProjectMutation object of the builder.
 func (pu *ProjectUpdate) Mutation() *ProjectMutation {
 	return pu.mutation
@@ -198,6 +115,9 @@ func (pu *ProjectUpdate) Mutation() *ProjectMutation {
 
 // Save executes the query and returns the number of nodes affected by the update operation.
 func (pu *ProjectUpdate) Save(ctx context.Context) (int, error) {
+	if err := pu.defaults(); err != nil {
+		return 0, err
+	}
 	return withHooks(ctx, pu.sqlSave, pu.mutation, pu.hooks)
 }
 
@@ -223,6 +143,18 @@ func (pu *ProjectUpdate) ExecX(ctx context.Context) {
 	}
 }
 
+// defaults sets the default values of the builder before save.
+func (pu *ProjectUpdate) defaults() error {
+	if _, ok := pu.mutation.UpdatedAt(); !ok && !pu.mutation.UpdatedAtCleared() {
+		if project.UpdateDefaultUpdatedAt == nil {
+			return fmt.Errorf("ent: uninitialized project.UpdateDefaultUpdatedAt (forgotten import ent/runtime?)")
+		}
+		v := project.UpdateDefaultUpdatedAt()
+		pu.mutation.SetUpdatedAt(v)
+	}
+	return nil
+}
+
 func (pu *ProjectUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	_spec := sqlgraph.NewUpdateSpec(project.Table, project.Columns, sqlgraph.NewFieldSpec(project.FieldID, field.TypeUint64))
 	if ps := pu.mutation.predicates; len(ps) > 0 {
@@ -232,53 +164,29 @@ func (pu *ProjectUpdate) sqlSave(ctx context.Context) (n int, err error) {
 			}
 		}
 	}
+	if value, ok := pu.mutation.UpdatedAt(); ok {
+		_spec.SetField(project.FieldUpdatedAt, field.TypeTime, value)
+	}
+	if pu.mutation.UpdatedAtCleared() {
+		_spec.ClearField(project.FieldUpdatedAt, field.TypeTime)
+	}
+	if value, ok := pu.mutation.UpdateBy(); ok {
+		_spec.SetField(project.FieldUpdateBy, field.TypeString, value)
+	}
+	if pu.mutation.UpdateByCleared() {
+		_spec.ClearField(project.FieldUpdateBy, field.TypeString)
+	}
+	if value, ok := pu.mutation.DeletedAt(); ok {
+		_spec.SetField(project.FieldDeletedAt, field.TypeTime, value)
+	}
+	if pu.mutation.DeletedAtCleared() {
+		_spec.ClearField(project.FieldDeletedAt, field.TypeTime)
+	}
 	if value, ok := pu.mutation.Name(); ok {
 		_spec.SetField(project.FieldName, field.TypeString, value)
 	}
 	if value, ok := pu.mutation.Code(); ok {
 		_spec.SetField(project.FieldCode, field.TypeString, value)
-	}
-	if value, ok := pu.mutation.CreateBy(); ok {
-		_spec.SetField(project.FieldCreateBy, field.TypeUint64, value)
-	}
-	if value, ok := pu.mutation.AddedCreateBy(); ok {
-		_spec.AddField(project.FieldCreateBy, field.TypeUint64, value)
-	}
-	if pu.mutation.CreateByCleared() {
-		_spec.ClearField(project.FieldCreateBy, field.TypeUint64)
-	}
-	if value, ok := pu.mutation.CreateTime(); ok {
-		_spec.SetField(project.FieldCreateTime, field.TypeTime, value)
-	}
-	if pu.mutation.CreateTimeCleared() {
-		_spec.ClearField(project.FieldCreateTime, field.TypeTime)
-	}
-	if value, ok := pu.mutation.UpdateBy(); ok {
-		_spec.SetField(project.FieldUpdateBy, field.TypeUint64, value)
-	}
-	if value, ok := pu.mutation.AddedUpdateBy(); ok {
-		_spec.AddField(project.FieldUpdateBy, field.TypeUint64, value)
-	}
-	if pu.mutation.UpdateByCleared() {
-		_spec.ClearField(project.FieldUpdateBy, field.TypeUint64)
-	}
-	if value, ok := pu.mutation.UpdateTime(); ok {
-		_spec.SetField(project.FieldUpdateTime, field.TypeTime, value)
-	}
-	if pu.mutation.UpdateTimeCleared() {
-		_spec.ClearField(project.FieldUpdateTime, field.TypeTime)
-	}
-	if value, ok := pu.mutation.TenantID(); ok {
-		_spec.SetField(project.FieldTenantID, field.TypeUint64, value)
-	}
-	if value, ok := pu.mutation.AddedTenantID(); ok {
-		_spec.AddField(project.FieldTenantID, field.TypeUint64, value)
-	}
-	if pu.mutation.TenantIDCleared() {
-		_spec.ClearField(project.FieldTenantID, field.TypeUint64)
-	}
-	if value, ok := pu.mutation.Deleted(); ok {
-		_spec.SetField(project.FieldDeleted, field.TypeBool, value)
 	}
 	if n, err = sqlgraph.UpdateNodes(ctx, pu.driver, _spec); err != nil {
 		if _, ok := err.(*sqlgraph.NotFoundError); ok {
@@ -298,6 +206,58 @@ type ProjectUpdateOne struct {
 	fields   []string
 	hooks    []Hook
 	mutation *ProjectMutation
+}
+
+// SetUpdatedAt sets the "updated_at" field.
+func (puo *ProjectUpdateOne) SetUpdatedAt(t time.Time) *ProjectUpdateOne {
+	puo.mutation.SetUpdatedAt(t)
+	return puo
+}
+
+// ClearUpdatedAt clears the value of the "updated_at" field.
+func (puo *ProjectUpdateOne) ClearUpdatedAt() *ProjectUpdateOne {
+	puo.mutation.ClearUpdatedAt()
+	return puo
+}
+
+// SetUpdateBy sets the "update_by" field.
+func (puo *ProjectUpdateOne) SetUpdateBy(s string) *ProjectUpdateOne {
+	puo.mutation.SetUpdateBy(s)
+	return puo
+}
+
+// SetNillableUpdateBy sets the "update_by" field if the given value is not nil.
+func (puo *ProjectUpdateOne) SetNillableUpdateBy(s *string) *ProjectUpdateOne {
+	if s != nil {
+		puo.SetUpdateBy(*s)
+	}
+	return puo
+}
+
+// ClearUpdateBy clears the value of the "update_by" field.
+func (puo *ProjectUpdateOne) ClearUpdateBy() *ProjectUpdateOne {
+	puo.mutation.ClearUpdateBy()
+	return puo
+}
+
+// SetDeletedAt sets the "deleted_at" field.
+func (puo *ProjectUpdateOne) SetDeletedAt(t time.Time) *ProjectUpdateOne {
+	puo.mutation.SetDeletedAt(t)
+	return puo
+}
+
+// SetNillableDeletedAt sets the "deleted_at" field if the given value is not nil.
+func (puo *ProjectUpdateOne) SetNillableDeletedAt(t *time.Time) *ProjectUpdateOne {
+	if t != nil {
+		puo.SetDeletedAt(*t)
+	}
+	return puo
+}
+
+// ClearDeletedAt clears the value of the "deleted_at" field.
+func (puo *ProjectUpdateOne) ClearDeletedAt() *ProjectUpdateOne {
+	puo.mutation.ClearDeletedAt()
+	return puo
 }
 
 // SetName sets the "name" field.
@@ -328,141 +288,6 @@ func (puo *ProjectUpdateOne) SetNillableCode(s *string) *ProjectUpdateOne {
 	return puo
 }
 
-// SetCreateBy sets the "create_by" field.
-func (puo *ProjectUpdateOne) SetCreateBy(u uint64) *ProjectUpdateOne {
-	puo.mutation.ResetCreateBy()
-	puo.mutation.SetCreateBy(u)
-	return puo
-}
-
-// SetNillableCreateBy sets the "create_by" field if the given value is not nil.
-func (puo *ProjectUpdateOne) SetNillableCreateBy(u *uint64) *ProjectUpdateOne {
-	if u != nil {
-		puo.SetCreateBy(*u)
-	}
-	return puo
-}
-
-// AddCreateBy adds u to the "create_by" field.
-func (puo *ProjectUpdateOne) AddCreateBy(u int64) *ProjectUpdateOne {
-	puo.mutation.AddCreateBy(u)
-	return puo
-}
-
-// ClearCreateBy clears the value of the "create_by" field.
-func (puo *ProjectUpdateOne) ClearCreateBy() *ProjectUpdateOne {
-	puo.mutation.ClearCreateBy()
-	return puo
-}
-
-// SetCreateTime sets the "create_time" field.
-func (puo *ProjectUpdateOne) SetCreateTime(t time.Time) *ProjectUpdateOne {
-	puo.mutation.SetCreateTime(t)
-	return puo
-}
-
-// SetNillableCreateTime sets the "create_time" field if the given value is not nil.
-func (puo *ProjectUpdateOne) SetNillableCreateTime(t *time.Time) *ProjectUpdateOne {
-	if t != nil {
-		puo.SetCreateTime(*t)
-	}
-	return puo
-}
-
-// ClearCreateTime clears the value of the "create_time" field.
-func (puo *ProjectUpdateOne) ClearCreateTime() *ProjectUpdateOne {
-	puo.mutation.ClearCreateTime()
-	return puo
-}
-
-// SetUpdateBy sets the "update_by" field.
-func (puo *ProjectUpdateOne) SetUpdateBy(u uint64) *ProjectUpdateOne {
-	puo.mutation.ResetUpdateBy()
-	puo.mutation.SetUpdateBy(u)
-	return puo
-}
-
-// SetNillableUpdateBy sets the "update_by" field if the given value is not nil.
-func (puo *ProjectUpdateOne) SetNillableUpdateBy(u *uint64) *ProjectUpdateOne {
-	if u != nil {
-		puo.SetUpdateBy(*u)
-	}
-	return puo
-}
-
-// AddUpdateBy adds u to the "update_by" field.
-func (puo *ProjectUpdateOne) AddUpdateBy(u int64) *ProjectUpdateOne {
-	puo.mutation.AddUpdateBy(u)
-	return puo
-}
-
-// ClearUpdateBy clears the value of the "update_by" field.
-func (puo *ProjectUpdateOne) ClearUpdateBy() *ProjectUpdateOne {
-	puo.mutation.ClearUpdateBy()
-	return puo
-}
-
-// SetUpdateTime sets the "update_time" field.
-func (puo *ProjectUpdateOne) SetUpdateTime(t time.Time) *ProjectUpdateOne {
-	puo.mutation.SetUpdateTime(t)
-	return puo
-}
-
-// SetNillableUpdateTime sets the "update_time" field if the given value is not nil.
-func (puo *ProjectUpdateOne) SetNillableUpdateTime(t *time.Time) *ProjectUpdateOne {
-	if t != nil {
-		puo.SetUpdateTime(*t)
-	}
-	return puo
-}
-
-// ClearUpdateTime clears the value of the "update_time" field.
-func (puo *ProjectUpdateOne) ClearUpdateTime() *ProjectUpdateOne {
-	puo.mutation.ClearUpdateTime()
-	return puo
-}
-
-// SetTenantID sets the "tenant_id" field.
-func (puo *ProjectUpdateOne) SetTenantID(u uint64) *ProjectUpdateOne {
-	puo.mutation.ResetTenantID()
-	puo.mutation.SetTenantID(u)
-	return puo
-}
-
-// SetNillableTenantID sets the "tenant_id" field if the given value is not nil.
-func (puo *ProjectUpdateOne) SetNillableTenantID(u *uint64) *ProjectUpdateOne {
-	if u != nil {
-		puo.SetTenantID(*u)
-	}
-	return puo
-}
-
-// AddTenantID adds u to the "tenant_id" field.
-func (puo *ProjectUpdateOne) AddTenantID(u int64) *ProjectUpdateOne {
-	puo.mutation.AddTenantID(u)
-	return puo
-}
-
-// ClearTenantID clears the value of the "tenant_id" field.
-func (puo *ProjectUpdateOne) ClearTenantID() *ProjectUpdateOne {
-	puo.mutation.ClearTenantID()
-	return puo
-}
-
-// SetDeleted sets the "deleted" field.
-func (puo *ProjectUpdateOne) SetDeleted(b bool) *ProjectUpdateOne {
-	puo.mutation.SetDeleted(b)
-	return puo
-}
-
-// SetNillableDeleted sets the "deleted" field if the given value is not nil.
-func (puo *ProjectUpdateOne) SetNillableDeleted(b *bool) *ProjectUpdateOne {
-	if b != nil {
-		puo.SetDeleted(*b)
-	}
-	return puo
-}
-
 // Mutation returns the ProjectMutation object of the builder.
 func (puo *ProjectUpdateOne) Mutation() *ProjectMutation {
 	return puo.mutation
@@ -483,6 +308,9 @@ func (puo *ProjectUpdateOne) Select(field string, fields ...string) *ProjectUpda
 
 // Save executes the query and returns the updated Project entity.
 func (puo *ProjectUpdateOne) Save(ctx context.Context) (*Project, error) {
+	if err := puo.defaults(); err != nil {
+		return nil, err
+	}
 	return withHooks(ctx, puo.sqlSave, puo.mutation, puo.hooks)
 }
 
@@ -506,6 +334,18 @@ func (puo *ProjectUpdateOne) ExecX(ctx context.Context) {
 	if err := puo.Exec(ctx); err != nil {
 		panic(err)
 	}
+}
+
+// defaults sets the default values of the builder before save.
+func (puo *ProjectUpdateOne) defaults() error {
+	if _, ok := puo.mutation.UpdatedAt(); !ok && !puo.mutation.UpdatedAtCleared() {
+		if project.UpdateDefaultUpdatedAt == nil {
+			return fmt.Errorf("ent: uninitialized project.UpdateDefaultUpdatedAt (forgotten import ent/runtime?)")
+		}
+		v := project.UpdateDefaultUpdatedAt()
+		puo.mutation.SetUpdatedAt(v)
+	}
+	return nil
 }
 
 func (puo *ProjectUpdateOne) sqlSave(ctx context.Context) (_node *Project, err error) {
@@ -534,53 +374,29 @@ func (puo *ProjectUpdateOne) sqlSave(ctx context.Context) (_node *Project, err e
 			}
 		}
 	}
+	if value, ok := puo.mutation.UpdatedAt(); ok {
+		_spec.SetField(project.FieldUpdatedAt, field.TypeTime, value)
+	}
+	if puo.mutation.UpdatedAtCleared() {
+		_spec.ClearField(project.FieldUpdatedAt, field.TypeTime)
+	}
+	if value, ok := puo.mutation.UpdateBy(); ok {
+		_spec.SetField(project.FieldUpdateBy, field.TypeString, value)
+	}
+	if puo.mutation.UpdateByCleared() {
+		_spec.ClearField(project.FieldUpdateBy, field.TypeString)
+	}
+	if value, ok := puo.mutation.DeletedAt(); ok {
+		_spec.SetField(project.FieldDeletedAt, field.TypeTime, value)
+	}
+	if puo.mutation.DeletedAtCleared() {
+		_spec.ClearField(project.FieldDeletedAt, field.TypeTime)
+	}
 	if value, ok := puo.mutation.Name(); ok {
 		_spec.SetField(project.FieldName, field.TypeString, value)
 	}
 	if value, ok := puo.mutation.Code(); ok {
 		_spec.SetField(project.FieldCode, field.TypeString, value)
-	}
-	if value, ok := puo.mutation.CreateBy(); ok {
-		_spec.SetField(project.FieldCreateBy, field.TypeUint64, value)
-	}
-	if value, ok := puo.mutation.AddedCreateBy(); ok {
-		_spec.AddField(project.FieldCreateBy, field.TypeUint64, value)
-	}
-	if puo.mutation.CreateByCleared() {
-		_spec.ClearField(project.FieldCreateBy, field.TypeUint64)
-	}
-	if value, ok := puo.mutation.CreateTime(); ok {
-		_spec.SetField(project.FieldCreateTime, field.TypeTime, value)
-	}
-	if puo.mutation.CreateTimeCleared() {
-		_spec.ClearField(project.FieldCreateTime, field.TypeTime)
-	}
-	if value, ok := puo.mutation.UpdateBy(); ok {
-		_spec.SetField(project.FieldUpdateBy, field.TypeUint64, value)
-	}
-	if value, ok := puo.mutation.AddedUpdateBy(); ok {
-		_spec.AddField(project.FieldUpdateBy, field.TypeUint64, value)
-	}
-	if puo.mutation.UpdateByCleared() {
-		_spec.ClearField(project.FieldUpdateBy, field.TypeUint64)
-	}
-	if value, ok := puo.mutation.UpdateTime(); ok {
-		_spec.SetField(project.FieldUpdateTime, field.TypeTime, value)
-	}
-	if puo.mutation.UpdateTimeCleared() {
-		_spec.ClearField(project.FieldUpdateTime, field.TypeTime)
-	}
-	if value, ok := puo.mutation.TenantID(); ok {
-		_spec.SetField(project.FieldTenantID, field.TypeUint64, value)
-	}
-	if value, ok := puo.mutation.AddedTenantID(); ok {
-		_spec.AddField(project.FieldTenantID, field.TypeUint64, value)
-	}
-	if puo.mutation.TenantIDCleared() {
-		_spec.ClearField(project.FieldTenantID, field.TypeUint64)
-	}
-	if value, ok := puo.mutation.Deleted(); ok {
-		_spec.SetField(project.FieldDeleted, field.TypeBool, value)
 	}
 	_node = &Project{config: puo.config}
 	_spec.Assign = _node.assignValues

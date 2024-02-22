@@ -308,12 +308,14 @@ func (c *ProjectClient) GetX(ctx context.Context, id uint64) *Project {
 
 // Hooks returns the client hooks.
 func (c *ProjectClient) Hooks() []Hook {
-	return c.hooks.Project
+	hooks := c.hooks.Project
+	return append(hooks[:len(hooks):len(hooks)], project.Hooks[:]...)
 }
 
 // Interceptors returns the client interceptors.
 func (c *ProjectClient) Interceptors() []Interceptor {
-	return c.inters.Project
+	inters := c.inters.Project
+	return append(inters[:len(inters):len(inters)], project.Interceptors[:]...)
 }
 
 func (c *ProjectClient) mutate(ctx context.Context, m *ProjectMutation) (Value, error) {

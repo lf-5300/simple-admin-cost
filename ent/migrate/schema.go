@@ -11,15 +11,14 @@ import (
 var (
 	// CcProjectColumns holds the columns for the "cc_project" table.
 	CcProjectColumns = []*schema.Column{
-		{Name: "id", Type: field.TypeUint64, Increment: true, Comment: "主键"},
+		{Name: "id", Type: field.TypeUint64, Increment: true},
+		{Name: "created_at", Type: field.TypeTime, Comment: "Create Time | 创建日期", SchemaType: map[string]string{"mysql": "datetime"}},
+		{Name: "updated_at", Type: field.TypeTime, Nullable: true, Comment: "Update Time | 修改日期", SchemaType: map[string]string{"mysql": "datetime"}},
+		{Name: "create_by", Type: field.TypeString, Comment: "创建人"},
+		{Name: "update_by", Type: field.TypeString, Nullable: true, Comment: "修改人"},
+		{Name: "deleted_at", Type: field.TypeTime, Nullable: true, Comment: "Delete Time | 删除日期", SchemaType: map[string]string{"mysql": "datetime"}},
 		{Name: "name", Type: field.TypeString, Comment: "项目名称"},
 		{Name: "code", Type: field.TypeString, Comment: "项目编码"},
-		{Name: "create_by", Type: field.TypeUint64, Nullable: true, Comment: "创建人"},
-		{Name: "create_time", Type: field.TypeTime, Nullable: true, Comment: "创建时间"},
-		{Name: "update_by", Type: field.TypeUint64, Nullable: true, Comment: "更新人"},
-		{Name: "update_time", Type: field.TypeTime, Nullable: true, Comment: "更新时间"},
-		{Name: "tenant_id", Type: field.TypeUint64, Nullable: true, Comment: "租户号"},
-		{Name: "deleted", Type: field.TypeBool, Comment: "是否删除"},
 	}
 	// CcProjectTable holds the schema information for the "cc_project" table.
 	CcProjectTable = &schema.Table{

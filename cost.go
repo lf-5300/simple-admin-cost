@@ -26,10 +26,10 @@ import (
 	"flag"
 	"fmt"
 
+	_ "github.com/hf/simple-admin-cost-api/ent/runtime"
 	"github.com/hf/simple-admin-cost-api/internal/config"
 	"github.com/hf/simple-admin-cost-api/internal/handler"
 	"github.com/hf/simple-admin-cost-api/internal/svc"
-
 	"github.com/zeromicro/go-zero/core/conf"
 	"github.com/zeromicro/go-zero/rest"
 )

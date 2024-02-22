@@ -3,13 +3,13 @@ package project
 import (
 	"context"
 
-	"github.com/hf/simple-admin-cost-api/ent/predicate"
 	"github.com/hf/simple-admin-cost-api/ent/project"
+	"github.com/hf/simple-admin-cost-api/ent/predicate"
 	"github.com/hf/simple-admin-cost-api/internal/svc"
 	"github.com/hf/simple-admin-cost-api/internal/types"
 	"github.com/hf/simple-admin-cost-api/internal/utils/dberrorhandler"
 
-	"github.com/suyuan32/simple-admin-common/i18n"
+    "github.com/suyuan32/simple-admin-common/i18n"
 
 	"github.com/suyuan32/simple-admin-common/utils/pointy"
 	"github.com/zeromicro/go-zero/core/logx"
@@ -31,11 +31,14 @@ func NewGetProjectListLogic(ctx context.Context, svcCtx *svc.ServiceContext) *Ge
 
 func (l *GetProjectListLogic) GetProjectList(req *types.ProjectListReq) (*types.ProjectListResp, error) {
 	var predicates []predicate.Project
+	if req.CreateBy != nil {
+		predicates = append(predicates, project.CreateByContains(*req.CreateBy))
+	}
+	if req.UpdateBy != nil {
+		predicates = append(predicates, project.UpdateByContains(*req.UpdateBy))
+	}
 	if req.Name != nil {
 		predicates = append(predicates, project.NameContains(*req.Name))
-	}
-	if req.Code != nil {
-		predicates = append(predicates, project.CodeContains(*req.Code))
 	}
 	data, err := l.svcCtx.DB.Project.Query().Where(predicates...).Page(l.ctx, req.Page, req.PageSize)
 
@@ -49,21 +52,17 @@ func (l *GetProjectListLogic) GetProjectList(req *types.ProjectListReq) (*types.
 
 	for _, v := range data.List {
 		resp.Data.Data = append(resp.Data.Data,
-			types.ProjectInfo{
-				BaseIDInfo: types.BaseIDInfo{
-					Id:        &v.ID,
-					CreatedAt: pointy.GetPointer(v.CreateTime.UnixMilli()),
-					UpdatedAt: pointy.GetPointer(v.UpdateTime.UnixMilli()),
-				},
-				Name:       &v.Name,
-				Code:       &v.Code,
-				CreateBy:   &v.CreateBy,
-				CreateTime: pointy.GetUnixMilliPointer(v.CreateTime.UnixMilli()),
-				UpdateBy:   &v.UpdateBy,
-				UpdateTime: pointy.GetUnixMilliPointer(v.UpdateTime.UnixMilli()),
-				TenantId:   &v.TenantID,
-				Deleted:    &v.Deleted,
-			})
+		types.ProjectInfo{
+            BaseIDInfo:    types.BaseIDInfo{
+				Id:          &v.ID,
+				CreatedAt:    pointy.GetPointer(v.CreatedAt.UnixMilli()),
+				UpdatedAt:    pointy.GetPointer(v.UpdatedAt.UnixMilli()),
+            },
+			CreateBy:	&v.CreateBy,
+			UpdateBy:	&v.UpdateBy,
+			Name:	&v.Name,
+			Code:	&v.Code,
+		})
 	}
 
 	return resp, nil

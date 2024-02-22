@@ -27,10 +27,13 @@ func NewInitDatabaseLogic(ctx context.Context, svcCtx *svc.ServiceContext) *Init
 }
 
 func (l *InitDatabaseLogic) InitDatabase() (resp *types.BaseMsgResp, err error) {
-    if err := l.svcCtx.DB.Schema.Create(l.ctx, schema.WithForeignKeys(false)); err != nil {
-        logx.Errorw(logmsg.DatabaseError, logx.Field("detail", err.Error()))
-        return nil, errorx.NewInternalError(err.Error())
-    }
-
-	return &types.BaseMsgResp{Msg:  l.svcCtx.Trans.Trans(l.ctx, i18n.Success)},nil
+	if err := l.svcCtx.DB.Schema.Create(l.ctx, schema.WithForeignKeys(false)); err != nil {
+		logx.Errorw(logmsg.DatabaseError, logx.Field("detail", err.Error()))
+		return nil, errorx.NewInternalError(err.Error())
+	}
+	err = l.insertApiData()
+	if err != nil {
+		return nil, err
+	}
+	return &types.BaseMsgResp{Msg: l.svcCtx.Trans.Trans(l.ctx, i18n.Success)}, nil
 }

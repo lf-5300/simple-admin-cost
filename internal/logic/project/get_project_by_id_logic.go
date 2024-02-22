@@ -7,7 +7,7 @@ import (
 	"github.com/hf/simple-admin-cost-api/internal/types"
 	"github.com/hf/simple-admin-cost-api/internal/utils/dberrorhandler"
 
-	"github.com/suyuan32/simple-admin-common/i18n"
+    "github.com/suyuan32/simple-admin-common/i18n"
 
 	"github.com/suyuan32/simple-admin-common/utils/pointy"
 	"github.com/zeromicro/go-zero/core/logx"
@@ -34,24 +34,21 @@ func (l *GetProjectByIdLogic) GetProjectById(req *types.IDReq) (*types.ProjectIn
 	}
 
 	return &types.ProjectInfoResp{
-		BaseDataInfo: types.BaseDataInfo{
-			Code: 0,
-			Msg:  l.svcCtx.Trans.Trans(l.ctx, i18n.Success),
-		},
-		Data: types.ProjectInfo{
-			BaseIDInfo: types.BaseIDInfo{
-				Id:        &data.ID,
-				CreatedAt: pointy.GetPointer(data.CreateTime.UnixMilli()),
-				UpdatedAt: pointy.GetPointer(data.UpdateTime.UnixMilli()),
-			},
-			Name:       &data.Name,
-			Code:       &data.Code,
-			CreateBy:   &data.CreateBy,
-			CreateTime: pointy.GetUnixMilliPointer(data.CreateTime.UnixMilli()),
-			UpdateBy:   &data.UpdateBy,
-			UpdateTime: pointy.GetUnixMilliPointer(data.UpdateTime.UnixMilli()),
-			TenantId:   &data.TenantID,
-			Deleted:    &data.Deleted,
-		},
+	    BaseDataInfo: types.BaseDataInfo{
+            Code: 0,
+            Msg:  l.svcCtx.Trans.Trans(l.ctx, i18n.Success),
+        },
+        Data: types.ProjectInfo{
+            BaseIDInfo:    types.BaseIDInfo{
+				Id:          &data.ID,
+				CreatedAt:    pointy.GetPointer(data.CreatedAt.UnixMilli()),
+				UpdatedAt:    pointy.GetPointer(data.UpdatedAt.UnixMilli()),
+            },
+			CreateBy:	&data.CreateBy,
+			UpdateBy:	&data.UpdateBy,
+			Name:	&data.Name,
+			Code:	&data.Code,
+        },
 	}, nil
 }
+

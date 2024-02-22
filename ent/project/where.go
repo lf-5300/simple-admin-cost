@@ -54,6 +54,31 @@ func IDLTE(id uint64) predicate.Project {
 	return predicate.Project(sql.FieldLTE(FieldID, id))
 }
 
+// CreatedAt applies equality check predicate on the "created_at" field. It's identical to CreatedAtEQ.
+func CreatedAt(v time.Time) predicate.Project {
+	return predicate.Project(sql.FieldEQ(FieldCreatedAt, v))
+}
+
+// UpdatedAt applies equality check predicate on the "updated_at" field. It's identical to UpdatedAtEQ.
+func UpdatedAt(v time.Time) predicate.Project {
+	return predicate.Project(sql.FieldEQ(FieldUpdatedAt, v))
+}
+
+// CreateBy applies equality check predicate on the "create_by" field. It's identical to CreateByEQ.
+func CreateBy(v string) predicate.Project {
+	return predicate.Project(sql.FieldEQ(FieldCreateBy, v))
+}
+
+// UpdateBy applies equality check predicate on the "update_by" field. It's identical to UpdateByEQ.
+func UpdateBy(v string) predicate.Project {
+	return predicate.Project(sql.FieldEQ(FieldUpdateBy, v))
+}
+
+// DeletedAt applies equality check predicate on the "deleted_at" field. It's identical to DeletedAtEQ.
+func DeletedAt(v time.Time) predicate.Project {
+	return predicate.Project(sql.FieldEQ(FieldDeletedAt, v))
+}
+
 // Name applies equality check predicate on the "name" field. It's identical to NameEQ.
 func Name(v string) predicate.Project {
 	return predicate.Project(sql.FieldEQ(FieldName, v))
@@ -64,34 +89,284 @@ func Code(v string) predicate.Project {
 	return predicate.Project(sql.FieldEQ(FieldCode, v))
 }
 
-// CreateBy applies equality check predicate on the "create_by" field. It's identical to CreateByEQ.
-func CreateBy(v uint64) predicate.Project {
+// CreatedAtEQ applies the EQ predicate on the "created_at" field.
+func CreatedAtEQ(v time.Time) predicate.Project {
+	return predicate.Project(sql.FieldEQ(FieldCreatedAt, v))
+}
+
+// CreatedAtNEQ applies the NEQ predicate on the "created_at" field.
+func CreatedAtNEQ(v time.Time) predicate.Project {
+	return predicate.Project(sql.FieldNEQ(FieldCreatedAt, v))
+}
+
+// CreatedAtIn applies the In predicate on the "created_at" field.
+func CreatedAtIn(vs ...time.Time) predicate.Project {
+	return predicate.Project(sql.FieldIn(FieldCreatedAt, vs...))
+}
+
+// CreatedAtNotIn applies the NotIn predicate on the "created_at" field.
+func CreatedAtNotIn(vs ...time.Time) predicate.Project {
+	return predicate.Project(sql.FieldNotIn(FieldCreatedAt, vs...))
+}
+
+// CreatedAtGT applies the GT predicate on the "created_at" field.
+func CreatedAtGT(v time.Time) predicate.Project {
+	return predicate.Project(sql.FieldGT(FieldCreatedAt, v))
+}
+
+// CreatedAtGTE applies the GTE predicate on the "created_at" field.
+func CreatedAtGTE(v time.Time) predicate.Project {
+	return predicate.Project(sql.FieldGTE(FieldCreatedAt, v))
+}
+
+// CreatedAtLT applies the LT predicate on the "created_at" field.
+func CreatedAtLT(v time.Time) predicate.Project {
+	return predicate.Project(sql.FieldLT(FieldCreatedAt, v))
+}
+
+// CreatedAtLTE applies the LTE predicate on the "created_at" field.
+func CreatedAtLTE(v time.Time) predicate.Project {
+	return predicate.Project(sql.FieldLTE(FieldCreatedAt, v))
+}
+
+// UpdatedAtEQ applies the EQ predicate on the "updated_at" field.
+func UpdatedAtEQ(v time.Time) predicate.Project {
+	return predicate.Project(sql.FieldEQ(FieldUpdatedAt, v))
+}
+
+// UpdatedAtNEQ applies the NEQ predicate on the "updated_at" field.
+func UpdatedAtNEQ(v time.Time) predicate.Project {
+	return predicate.Project(sql.FieldNEQ(FieldUpdatedAt, v))
+}
+
+// UpdatedAtIn applies the In predicate on the "updated_at" field.
+func UpdatedAtIn(vs ...time.Time) predicate.Project {
+	return predicate.Project(sql.FieldIn(FieldUpdatedAt, vs...))
+}
+
+// UpdatedAtNotIn applies the NotIn predicate on the "updated_at" field.
+func UpdatedAtNotIn(vs ...time.Time) predicate.Project {
+	return predicate.Project(sql.FieldNotIn(FieldUpdatedAt, vs...))
+}
+
+// UpdatedAtGT applies the GT predicate on the "updated_at" field.
+func UpdatedAtGT(v time.Time) predicate.Project {
+	return predicate.Project(sql.FieldGT(FieldUpdatedAt, v))
+}
+
+// UpdatedAtGTE applies the GTE predicate on the "updated_at" field.
+func UpdatedAtGTE(v time.Time) predicate.Project {
+	return predicate.Project(sql.FieldGTE(FieldUpdatedAt, v))
+}
+
+// UpdatedAtLT applies the LT predicate on the "updated_at" field.
+func UpdatedAtLT(v time.Time) predicate.Project {
+	return predicate.Project(sql.FieldLT(FieldUpdatedAt, v))
+}
+
+// UpdatedAtLTE applies the LTE predicate on the "updated_at" field.
+func UpdatedAtLTE(v time.Time) predicate.Project {
+	return predicate.Project(sql.FieldLTE(FieldUpdatedAt, v))
+}
+
+// UpdatedAtIsNil applies the IsNil predicate on the "updated_at" field.
+func UpdatedAtIsNil() predicate.Project {
+	return predicate.Project(sql.FieldIsNull(FieldUpdatedAt))
+}
+
+// UpdatedAtNotNil applies the NotNil predicate on the "updated_at" field.
+func UpdatedAtNotNil() predicate.Project {
+	return predicate.Project(sql.FieldNotNull(FieldUpdatedAt))
+}
+
+// CreateByEQ applies the EQ predicate on the "create_by" field.
+func CreateByEQ(v string) predicate.Project {
 	return predicate.Project(sql.FieldEQ(FieldCreateBy, v))
 }
 
-// CreateTime applies equality check predicate on the "create_time" field. It's identical to CreateTimeEQ.
-func CreateTime(v time.Time) predicate.Project {
-	return predicate.Project(sql.FieldEQ(FieldCreateTime, v))
+// CreateByNEQ applies the NEQ predicate on the "create_by" field.
+func CreateByNEQ(v string) predicate.Project {
+	return predicate.Project(sql.FieldNEQ(FieldCreateBy, v))
 }
 
-// UpdateBy applies equality check predicate on the "update_by" field. It's identical to UpdateByEQ.
-func UpdateBy(v uint64) predicate.Project {
+// CreateByIn applies the In predicate on the "create_by" field.
+func CreateByIn(vs ...string) predicate.Project {
+	return predicate.Project(sql.FieldIn(FieldCreateBy, vs...))
+}
+
+// CreateByNotIn applies the NotIn predicate on the "create_by" field.
+func CreateByNotIn(vs ...string) predicate.Project {
+	return predicate.Project(sql.FieldNotIn(FieldCreateBy, vs...))
+}
+
+// CreateByGT applies the GT predicate on the "create_by" field.
+func CreateByGT(v string) predicate.Project {
+	return predicate.Project(sql.FieldGT(FieldCreateBy, v))
+}
+
+// CreateByGTE applies the GTE predicate on the "create_by" field.
+func CreateByGTE(v string) predicate.Project {
+	return predicate.Project(sql.FieldGTE(FieldCreateBy, v))
+}
+
+// CreateByLT applies the LT predicate on the "create_by" field.
+func CreateByLT(v string) predicate.Project {
+	return predicate.Project(sql.FieldLT(FieldCreateBy, v))
+}
+
+// CreateByLTE applies the LTE predicate on the "create_by" field.
+func CreateByLTE(v string) predicate.Project {
+	return predicate.Project(sql.FieldLTE(FieldCreateBy, v))
+}
+
+// CreateByContains applies the Contains predicate on the "create_by" field.
+func CreateByContains(v string) predicate.Project {
+	return predicate.Project(sql.FieldContains(FieldCreateBy, v))
+}
+
+// CreateByHasPrefix applies the HasPrefix predicate on the "create_by" field.
+func CreateByHasPrefix(v string) predicate.Project {
+	return predicate.Project(sql.FieldHasPrefix(FieldCreateBy, v))
+}
+
+// CreateByHasSuffix applies the HasSuffix predicate on the "create_by" field.
+func CreateByHasSuffix(v string) predicate.Project {
+	return predicate.Project(sql.FieldHasSuffix(FieldCreateBy, v))
+}
+
+// CreateByEqualFold applies the EqualFold predicate on the "create_by" field.
+func CreateByEqualFold(v string) predicate.Project {
+	return predicate.Project(sql.FieldEqualFold(FieldCreateBy, v))
+}
+
+// CreateByContainsFold applies the ContainsFold predicate on the "create_by" field.
+func CreateByContainsFold(v string) predicate.Project {
+	return predicate.Project(sql.FieldContainsFold(FieldCreateBy, v))
+}
+
+// UpdateByEQ applies the EQ predicate on the "update_by" field.
+func UpdateByEQ(v string) predicate.Project {
 	return predicate.Project(sql.FieldEQ(FieldUpdateBy, v))
 }
 
-// UpdateTime applies equality check predicate on the "update_time" field. It's identical to UpdateTimeEQ.
-func UpdateTime(v time.Time) predicate.Project {
-	return predicate.Project(sql.FieldEQ(FieldUpdateTime, v))
+// UpdateByNEQ applies the NEQ predicate on the "update_by" field.
+func UpdateByNEQ(v string) predicate.Project {
+	return predicate.Project(sql.FieldNEQ(FieldUpdateBy, v))
 }
 
-// TenantID applies equality check predicate on the "tenant_id" field. It's identical to TenantIDEQ.
-func TenantID(v uint64) predicate.Project {
-	return predicate.Project(sql.FieldEQ(FieldTenantID, v))
+// UpdateByIn applies the In predicate on the "update_by" field.
+func UpdateByIn(vs ...string) predicate.Project {
+	return predicate.Project(sql.FieldIn(FieldUpdateBy, vs...))
 }
 
-// Deleted applies equality check predicate on the "deleted" field. It's identical to DeletedEQ.
-func Deleted(v bool) predicate.Project {
-	return predicate.Project(sql.FieldEQ(FieldDeleted, v))
+// UpdateByNotIn applies the NotIn predicate on the "update_by" field.
+func UpdateByNotIn(vs ...string) predicate.Project {
+	return predicate.Project(sql.FieldNotIn(FieldUpdateBy, vs...))
+}
+
+// UpdateByGT applies the GT predicate on the "update_by" field.
+func UpdateByGT(v string) predicate.Project {
+	return predicate.Project(sql.FieldGT(FieldUpdateBy, v))
+}
+
+// UpdateByGTE applies the GTE predicate on the "update_by" field.
+func UpdateByGTE(v string) predicate.Project {
+	return predicate.Project(sql.FieldGTE(FieldUpdateBy, v))
+}
+
+// UpdateByLT applies the LT predicate on the "update_by" field.
+func UpdateByLT(v string) predicate.Project {
+	return predicate.Project(sql.FieldLT(FieldUpdateBy, v))
+}
+
+// UpdateByLTE applies the LTE predicate on the "update_by" field.
+func UpdateByLTE(v string) predicate.Project {
+	return predicate.Project(sql.FieldLTE(FieldUpdateBy, v))
+}
+
+// UpdateByContains applies the Contains predicate on the "update_by" field.
+func UpdateByContains(v string) predicate.Project {
+	return predicate.Project(sql.FieldContains(FieldUpdateBy, v))
+}
+
+// UpdateByHasPrefix applies the HasPrefix predicate on the "update_by" field.
+func UpdateByHasPrefix(v string) predicate.Project {
+	return predicate.Project(sql.FieldHasPrefix(FieldUpdateBy, v))
+}
+
+// UpdateByHasSuffix applies the HasSuffix predicate on the "update_by" field.
+func UpdateByHasSuffix(v string) predicate.Project {
+	return predicate.Project(sql.FieldHasSuffix(FieldUpdateBy, v))
+}
+
+// UpdateByIsNil applies the IsNil predicate on the "update_by" field.
+func UpdateByIsNil() predicate.Project {
+	return predicate.Project(sql.FieldIsNull(FieldUpdateBy))
+}
+
+// UpdateByNotNil applies the NotNil predicate on the "update_by" field.
+func UpdateByNotNil() predicate.Project {
+	return predicate.Project(sql.FieldNotNull(FieldUpdateBy))
+}
+
+// UpdateByEqualFold applies the EqualFold predicate on the "update_by" field.
+func UpdateByEqualFold(v string) predicate.Project {
+	return predicate.Project(sql.FieldEqualFold(FieldUpdateBy, v))
+}
+
+// UpdateByContainsFold applies the ContainsFold predicate on the "update_by" field.
+func UpdateByContainsFold(v string) predicate.Project {
+	return predicate.Project(sql.FieldContainsFold(FieldUpdateBy, v))
+}
+
+// DeletedAtEQ applies the EQ predicate on the "deleted_at" field.
+func DeletedAtEQ(v time.Time) predicate.Project {
+	return predicate.Project(sql.FieldEQ(FieldDeletedAt, v))
+}
+
+// DeletedAtNEQ applies the NEQ predicate on the "deleted_at" field.
+func DeletedAtNEQ(v time.Time) predicate.Project {
+	return predicate.Project(sql.FieldNEQ(FieldDeletedAt, v))
+}
+
+// DeletedAtIn applies the In predicate on the "deleted_at" field.
+func DeletedAtIn(vs ...time.Time) predicate.Project {
+	return predicate.Project(sql.FieldIn(FieldDeletedAt, vs...))
+}
+
+// DeletedAtNotIn applies the NotIn predicate on the "deleted_at" field.
+func DeletedAtNotIn(vs ...time.Time) predicate.Project {
+	return predicate.Project(sql.FieldNotIn(FieldDeletedAt, vs...))
+}
+
+// DeletedAtGT applies the GT predicate on the "deleted_at" field.
+func DeletedAtGT(v time.Time) predicate.Project {
+	return predicate.Project(sql.FieldGT(FieldDeletedAt, v))
+}
+
+// DeletedAtGTE applies the GTE predicate on the "deleted_at" field.
+func DeletedAtGTE(v time.Time) predicate.Project {
+	return predicate.Project(sql.FieldGTE(FieldDeletedAt, v))
+}
+
+// DeletedAtLT applies the LT predicate on the "deleted_at" field.
+func DeletedAtLT(v time.Time) predicate.Project {
+	return predicate.Project(sql.FieldLT(FieldDeletedAt, v))
+}
+
+// DeletedAtLTE applies the LTE predicate on the "deleted_at" field.
+func DeletedAtLTE(v time.Time) predicate.Project {
+	return predicate.Project(sql.FieldLTE(FieldDeletedAt, v))
+}
+
+// DeletedAtIsNil applies the IsNil predicate on the "deleted_at" field.
+func DeletedAtIsNil() predicate.Project {
+	return predicate.Project(sql.FieldIsNull(FieldDeletedAt))
+}
+
+// DeletedAtNotNil applies the NotNil predicate on the "deleted_at" field.
+func DeletedAtNotNil() predicate.Project {
+	return predicate.Project(sql.FieldNotNull(FieldDeletedAt))
 }
 
 // NameEQ applies the EQ predicate on the "name" field.
@@ -222,266 +497,6 @@ func CodeEqualFold(v string) predicate.Project {
 // CodeContainsFold applies the ContainsFold predicate on the "code" field.
 func CodeContainsFold(v string) predicate.Project {
 	return predicate.Project(sql.FieldContainsFold(FieldCode, v))
-}
-
-// CreateByEQ applies the EQ predicate on the "create_by" field.
-func CreateByEQ(v uint64) predicate.Project {
-	return predicate.Project(sql.FieldEQ(FieldCreateBy, v))
-}
-
-// CreateByNEQ applies the NEQ predicate on the "create_by" field.
-func CreateByNEQ(v uint64) predicate.Project {
-	return predicate.Project(sql.FieldNEQ(FieldCreateBy, v))
-}
-
-// CreateByIn applies the In predicate on the "create_by" field.
-func CreateByIn(vs ...uint64) predicate.Project {
-	return predicate.Project(sql.FieldIn(FieldCreateBy, vs...))
-}
-
-// CreateByNotIn applies the NotIn predicate on the "create_by" field.
-func CreateByNotIn(vs ...uint64) predicate.Project {
-	return predicate.Project(sql.FieldNotIn(FieldCreateBy, vs...))
-}
-
-// CreateByGT applies the GT predicate on the "create_by" field.
-func CreateByGT(v uint64) predicate.Project {
-	return predicate.Project(sql.FieldGT(FieldCreateBy, v))
-}
-
-// CreateByGTE applies the GTE predicate on the "create_by" field.
-func CreateByGTE(v uint64) predicate.Project {
-	return predicate.Project(sql.FieldGTE(FieldCreateBy, v))
-}
-
-// CreateByLT applies the LT predicate on the "create_by" field.
-func CreateByLT(v uint64) predicate.Project {
-	return predicate.Project(sql.FieldLT(FieldCreateBy, v))
-}
-
-// CreateByLTE applies the LTE predicate on the "create_by" field.
-func CreateByLTE(v uint64) predicate.Project {
-	return predicate.Project(sql.FieldLTE(FieldCreateBy, v))
-}
-
-// CreateByIsNil applies the IsNil predicate on the "create_by" field.
-func CreateByIsNil() predicate.Project {
-	return predicate.Project(sql.FieldIsNull(FieldCreateBy))
-}
-
-// CreateByNotNil applies the NotNil predicate on the "create_by" field.
-func CreateByNotNil() predicate.Project {
-	return predicate.Project(sql.FieldNotNull(FieldCreateBy))
-}
-
-// CreateTimeEQ applies the EQ predicate on the "create_time" field.
-func CreateTimeEQ(v time.Time) predicate.Project {
-	return predicate.Project(sql.FieldEQ(FieldCreateTime, v))
-}
-
-// CreateTimeNEQ applies the NEQ predicate on the "create_time" field.
-func CreateTimeNEQ(v time.Time) predicate.Project {
-	return predicate.Project(sql.FieldNEQ(FieldCreateTime, v))
-}
-
-// CreateTimeIn applies the In predicate on the "create_time" field.
-func CreateTimeIn(vs ...time.Time) predicate.Project {
-	return predicate.Project(sql.FieldIn(FieldCreateTime, vs...))
-}
-
-// CreateTimeNotIn applies the NotIn predicate on the "create_time" field.
-func CreateTimeNotIn(vs ...time.Time) predicate.Project {
-	return predicate.Project(sql.FieldNotIn(FieldCreateTime, vs...))
-}
-
-// CreateTimeGT applies the GT predicate on the "create_time" field.
-func CreateTimeGT(v time.Time) predicate.Project {
-	return predicate.Project(sql.FieldGT(FieldCreateTime, v))
-}
-
-// CreateTimeGTE applies the GTE predicate on the "create_time" field.
-func CreateTimeGTE(v time.Time) predicate.Project {
-	return predicate.Project(sql.FieldGTE(FieldCreateTime, v))
-}
-
-// CreateTimeLT applies the LT predicate on the "create_time" field.
-func CreateTimeLT(v time.Time) predicate.Project {
-	return predicate.Project(sql.FieldLT(FieldCreateTime, v))
-}
-
-// CreateTimeLTE applies the LTE predicate on the "create_time" field.
-func CreateTimeLTE(v time.Time) predicate.Project {
-	return predicate.Project(sql.FieldLTE(FieldCreateTime, v))
-}
-
-// CreateTimeIsNil applies the IsNil predicate on the "create_time" field.
-func CreateTimeIsNil() predicate.Project {
-	return predicate.Project(sql.FieldIsNull(FieldCreateTime))
-}
-
-// CreateTimeNotNil applies the NotNil predicate on the "create_time" field.
-func CreateTimeNotNil() predicate.Project {
-	return predicate.Project(sql.FieldNotNull(FieldCreateTime))
-}
-
-// UpdateByEQ applies the EQ predicate on the "update_by" field.
-func UpdateByEQ(v uint64) predicate.Project {
-	return predicate.Project(sql.FieldEQ(FieldUpdateBy, v))
-}
-
-// UpdateByNEQ applies the NEQ predicate on the "update_by" field.
-func UpdateByNEQ(v uint64) predicate.Project {
-	return predicate.Project(sql.FieldNEQ(FieldUpdateBy, v))
-}
-
-// UpdateByIn applies the In predicate on the "update_by" field.
-func UpdateByIn(vs ...uint64) predicate.Project {
-	return predicate.Project(sql.FieldIn(FieldUpdateBy, vs...))
-}
-
-// UpdateByNotIn applies the NotIn predicate on the "update_by" field.
-func UpdateByNotIn(vs ...uint64) predicate.Project {
-	return predicate.Project(sql.FieldNotIn(FieldUpdateBy, vs...))
-}
-
-// UpdateByGT applies the GT predicate on the "update_by" field.
-func UpdateByGT(v uint64) predicate.Project {
-	return predicate.Project(sql.FieldGT(FieldUpdateBy, v))
-}
-
-// UpdateByGTE applies the GTE predicate on the "update_by" field.
-func UpdateByGTE(v uint64) predicate.Project {
-	return predicate.Project(sql.FieldGTE(FieldUpdateBy, v))
-}
-
-// UpdateByLT applies the LT predicate on the "update_by" field.
-func UpdateByLT(v uint64) predicate.Project {
-	return predicate.Project(sql.FieldLT(FieldUpdateBy, v))
-}
-
-// UpdateByLTE applies the LTE predicate on the "update_by" field.
-func UpdateByLTE(v uint64) predicate.Project {
-	return predicate.Project(sql.FieldLTE(FieldUpdateBy, v))
-}
-
-// UpdateByIsNil applies the IsNil predicate on the "update_by" field.
-func UpdateByIsNil() predicate.Project {
-	return predicate.Project(sql.FieldIsNull(FieldUpdateBy))
-}
-
-// UpdateByNotNil applies the NotNil predicate on the "update_by" field.
-func UpdateByNotNil() predicate.Project {
-	return predicate.Project(sql.FieldNotNull(FieldUpdateBy))
-}
-
-// UpdateTimeEQ applies the EQ predicate on the "update_time" field.
-func UpdateTimeEQ(v time.Time) predicate.Project {
-	return predicate.Project(sql.FieldEQ(FieldUpdateTime, v))
-}
-
-// UpdateTimeNEQ applies the NEQ predicate on the "update_time" field.
-func UpdateTimeNEQ(v time.Time) predicate.Project {
-	return predicate.Project(sql.FieldNEQ(FieldUpdateTime, v))
-}
-
-// UpdateTimeIn applies the In predicate on the "update_time" field.
-func UpdateTimeIn(vs ...time.Time) predicate.Project {
-	return predicate.Project(sql.FieldIn(FieldUpdateTime, vs...))
-}
-
-// UpdateTimeNotIn applies the NotIn predicate on the "update_time" field.
-func UpdateTimeNotIn(vs ...time.Time) predicate.Project {
-	return predicate.Project(sql.FieldNotIn(FieldUpdateTime, vs...))
-}
-
-// UpdateTimeGT applies the GT predicate on the "update_time" field.
-func UpdateTimeGT(v time.Time) predicate.Project {
-	return predicate.Project(sql.FieldGT(FieldUpdateTime, v))
-}
-
-// UpdateTimeGTE applies the GTE predicate on the "update_time" field.
-func UpdateTimeGTE(v time.Time) predicate.Project {
-	return predicate.Project(sql.FieldGTE(FieldUpdateTime, v))
-}
-
-// UpdateTimeLT applies the LT predicate on the "update_time" field.
-func UpdateTimeLT(v time.Time) predicate.Project {
-	return predicate.Project(sql.FieldLT(FieldUpdateTime, v))
-}
-
-// UpdateTimeLTE applies the LTE predicate on the "update_time" field.
-func UpdateTimeLTE(v time.Time) predicate.Project {
-	return predicate.Project(sql.FieldLTE(FieldUpdateTime, v))
-}
-
-// UpdateTimeIsNil applies the IsNil predicate on the "update_time" field.
-func UpdateTimeIsNil() predicate.Project {
-	return predicate.Project(sql.FieldIsNull(FieldUpdateTime))
-}
-
-// UpdateTimeNotNil applies the NotNil predicate on the "update_time" field.
-func UpdateTimeNotNil() predicate.Project {
-	return predicate.Project(sql.FieldNotNull(FieldUpdateTime))
-}
-
-// TenantIDEQ applies the EQ predicate on the "tenant_id" field.
-func TenantIDEQ(v uint64) predicate.Project {
-	return predicate.Project(sql.FieldEQ(FieldTenantID, v))
-}
-
-// TenantIDNEQ applies the NEQ predicate on the "tenant_id" field.
-func TenantIDNEQ(v uint64) predicate.Project {
-	return predicate.Project(sql.FieldNEQ(FieldTenantID, v))
-}
-
-// TenantIDIn applies the In predicate on the "tenant_id" field.
-func TenantIDIn(vs ...uint64) predicate.Project {
-	return predicate.Project(sql.FieldIn(FieldTenantID, vs...))
-}
-
-// TenantIDNotIn applies the NotIn predicate on the "tenant_id" field.
-func TenantIDNotIn(vs ...uint64) predicate.Project {
-	return predicate.Project(sql.FieldNotIn(FieldTenantID, vs...))
-}
-
-// TenantIDGT applies the GT predicate on the "tenant_id" field.
-func TenantIDGT(v uint64) predicate.Project {
-	return predicate.Project(sql.FieldGT(FieldTenantID, v))
-}
-
-// TenantIDGTE applies the GTE predicate on the "tenant_id" field.
-func TenantIDGTE(v uint64) predicate.Project {
-	return predicate.Project(sql.FieldGTE(FieldTenantID, v))
-}
-
-// TenantIDLT applies the LT predicate on the "tenant_id" field.
-func TenantIDLT(v uint64) predicate.Project {
-	return predicate.Project(sql.FieldLT(FieldTenantID, v))
-}
-
-// TenantIDLTE applies the LTE predicate on the "tenant_id" field.
-func TenantIDLTE(v uint64) predicate.Project {
-	return predicate.Project(sql.FieldLTE(FieldTenantID, v))
-}
-
-// TenantIDIsNil applies the IsNil predicate on the "tenant_id" field.
-func TenantIDIsNil() predicate.Project {
-	return predicate.Project(sql.FieldIsNull(FieldTenantID))
-}
-
-// TenantIDNotNil applies the NotNil predicate on the "tenant_id" field.
-func TenantIDNotNil() predicate.Project {
-	return predicate.Project(sql.FieldNotNull(FieldTenantID))
-}
-
-// DeletedEQ applies the EQ predicate on the "deleted" field.
-func DeletedEQ(v bool) predicate.Project {
-	return predicate.Project(sql.FieldEQ(FieldDeleted, v))
-}
-
-// DeletedNEQ applies the NEQ predicate on the "deleted" field.
-func DeletedNEQ(v bool) predicate.Project {
-	return predicate.Project(sql.FieldNEQ(FieldDeleted, v))
 }
 
 // And groups predicates with the AND operator between them.

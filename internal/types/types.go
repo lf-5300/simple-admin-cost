@@ -119,22 +119,14 @@ type BaseUUIDInfo struct {
 // swagger:model ProjectInfo
 type ProjectInfo struct {
 	BaseIDInfo
+	// 创建人
+	CreateBy *string `json:"createBy,optional"`
+	// 修改人
+	UpdateBy *string `json:"updateBy,optional"`
 	// 项目名称
 	Name *string `json:"name,optional"`
 	// 项目编码
 	Code *string `json:"code,optional"`
-	// 创建人
-	CreateBy *uint64 `json:"createBy,optional"`
-	// 创建时间
-	CreateTime *int64 `json:"createTime,optional"`
-	// 更新人
-	UpdateBy *uint64 `json:"updateBy,optional"`
-	// 更新时间
-	UpdateTime *int64 `json:"updateTime,optional"`
-	// 租户号
-	TenantId *uint64 `json:"tenantId,optional"`
-	// 是否删除
-	Deleted *bool `json:"deleted,optional"`
 }
 
 // The response data of project list | Project列表数据
@@ -157,10 +149,12 @@ type ProjectListInfo struct {
 // swagger:model ProjectListReq
 type ProjectListReq struct {
 	PageInfo
+	// 创建人
+	CreateBy *string `json:"createBy,optional"`
+	// 修改人
+	UpdateBy *string `json:"updateBy,optional"`
 	// 项目名称
 	Name *string `json:"name,optional"`
-	// 项目编码
-	Code *string `json:"code,optional"`
 }
 
 // Project information response | Project信息返回体
